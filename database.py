@@ -14,8 +14,5 @@ def create_db_and_tables():
 def get_session():
     """Función generadora para obtener una sesión de SQLModel. Usada como dependencia en FastAPI."""
     with Session(engine) as session:
-<<<<<<< HEAD
         yield session
-=======
-        yield session
->>>>>>> 1b69218 (PROYECT)
+

@@ -64,4 +64,8 @@ La documentación interactiva de todos los *endpoints* está disponible en: `htt
 | **POST** | `/vehiculos/` | Crear Vehículo | Placa (`PK`) |
 | **GET** | `/vehiculos/{placa}` | Consultar por Placa | Placa (`str`) |
 | **DELETE** | `/vehiculos/{placa}` | Eliminar (Soft Delete) | Placa (`str`) |
+<<<<<<< HEAD
 >>>>>>> 1b69218 (PROYECT)
+=======
+
+>>>>>>> 59e21bf (PROJECT SOFTWARE)
