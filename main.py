@@ -5,6 +5,12 @@ Autor: Jhon Alexander Rodriguez Redondo
 Punto de entrada para la aplicación FastAPI.
 Define los endpoints CRUD para Usuario, Vehiculo, FichaTecnica y Compra.
 """
+import datetime
+from fastapi import Form, UploadFile, File # Añadir UploadFile y File
+from fastapi.responses import HTMLResponse # Necesaria para la respuesta HTML
+import shutil # Para manejar archivos
+
+
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles # Para servir CSS (Punto K)
 from starlette.requests import Request # Para recibir la petición y renderizar
@@ -83,16 +89,56 @@ def homepage(request: Request):
     # El diccionario de contexto se pasa al template (ej. el título de la página)
     context = {
         "request": request,
-        "titulo_pagina": "AutoSeguro360 - Dashboard Principal"
+        "titulo_pagina": "AUTOSEGURO 360 - PÁGINA INICIO"
     }
     return templates.TemplateResponse("index.html", context)
 
-@app.post("/usuarios/", response_model=UsuarioRead, status_code=status.HTTP_201_CREATED, tags=["Usuarios"])
-def create_usuario(usuario: UsuarioCreate, session: Session = Depends(get_session)):
-    """Crea un nuevo Usuario en la base de datos. La Cédula es la clave primaria."""
-    db_usuario = Usuario.model_validate(usuario)
+# =================================================================
+# 3. ENDPOINTS PARA USUARIO (CRUD y Formulario)
+# =================================================================
+
+@app.post("/usuarios/", status_code=status.HTTP_201_CREATED, tags=["Usuarios"])
+def create_usuario_from_form(
+    session: Session = Depends(get_session),
+    cedula: str = Form(...),
+    nombres_completo: str = Form(...),
+    celular: str = Form(...),
+    email: str = Form(...),
+    edad: int = Form(...),
+    categoria_licencia: str = Form("0"),
+    foto_perfil: Optional[UploadFile] = File(None) # 🚨 CLAVE: Recibe el archivo
+):
+    """Crea un nuevo Usuario en la base de datos a partir de un formulario HTML, manejando la carga de archivos multimedia."""
     
-    # Comprobar si ya existe un usuario con esa cédula o email
+    # --- Manejo de la URL Multimedia ---
+    foto_url = None
+    
+    if foto_perfil and foto_perfil.filename:
+        # 🚨 SIMULACIÓN DE SUBIDA A SUPABASE (Punto H)
+        file_extension = foto_perfil.filename.split('.')[-1]
+        unique_filename = f"perfil_{cedula}_{datetime.now().timestamp()}.{file_extension}"
+        
+        # Asignamos la URL simulada que Supabase daría
+        foto_url = f"https://supabase.storage.io/public/perfiles/{unique_filename}"
+        
+    # 1. Crear el objeto UsuarioCreate a partir de los datos del formulario
+    usuario_data = {
+        "cedula": cedula,
+        "nombres_completo": nombres_completo,
+        "celular": celular,
+        "email": email,
+        "edad": edad,
+        "categoria_licencia": categoria_licencia,
+        "foto_perfil_url": foto_url # Usamos la URL generada o None
+    }
+    
+    try:
+        usuario_create = UsuarioCreate(**usuario_data)
+        db_usuario = Usuario.model_validate(usuario_create)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error en la validación de datos: {e}")
+
+    # 2. Comprobar si ya existe
     existing_user = session.get(Usuario, db_usuario.cedula)
     if existing_user:
         raise HTTPException(
@@ -100,54 +146,36 @@ def create_usuario(usuario: UsuarioCreate, session: Session = Depends(get_sessio
             detail=f"Usuario con cédula {db_usuario.cedula} ya existe."
         )
 
+    # 3. Almacenar en la DB
     session.add(db_usuario)
     session.commit()
     session.refresh(db_usuario)
-    return db_usuario
-
-@app.get("/usuarios/", response_model=List[UsuarioRead], tags=["Usuarios"])
-def read_usuarios(session: Session = Depends(get_session)):
-    """Obtiene una lista de todos los Usuarios activos (estado=True)."""
-    statement = select(Usuario).where(Usuario.estado == True)
-    results = session.exec(statement).all()
-    return results
-
-@app.get("/usuarios/{cedula}", response_model=UsuarioReadWithCompras, tags=["Usuarios"])
-def read_usuario(cedula: str, session: Session = Depends(get_session)):
-    """Obtiene un Usuario específico por su Cédula, incluyendo su historial de Compras."""
-    usuario = session.get(Usuario, cedula)
-    if not usuario or usuario.estado == False:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado o inactivo.")
-    return usuario
-
-@app.patch("/usuarios/{cedula}", response_model=UsuarioRead, tags=["Usuarios"])
-def update_usuario(cedula: str, usuario_update: UsuarioUpdate, session: Session = Depends(get_session)):
-    """Actualiza datos de un Usuario por su Cédula (excepto la Cédula misma)."""
-    usuario = session.get(Usuario, cedula)
-    if not usuario or usuario.estado == False:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado o inactivo.")
-
-    # Aplicar la actualización parcial
-    hero_data = usuario_update.model_dump(exclude_unset=True)
-    usuario.model_validate(hero_data, update=True)
     
-    session.add(usuario)
-    session.commit()
-    session.refresh(usuario)
-    return usuario
+    # 4. Devolver una respuesta HTML
+    return HTMLResponse(content=f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Registro Exitoso</title>
+            <link rel="stylesheet" href="{app.url_path_for('static', path='/style.css')}">
+        </head>
+        <body>
+            <header><h1>Registro Exitoso</h1></header>
+            <main class="contenedor-formulario">
+                <p>✅ El usuario con cédula <strong>{db_usuario.cedula}</strong> ha sido registrado correctamente.</p>
+                <p>Nombre: {db_usuario.nombres_completo}</p>
+                {f'<p>URL Multimedia: <a href="{db_usuario.foto_perfil_url}" target="_blank">Ver Foto</a></p>' if db_usuario.foto_perfil_url else ''}
+                <p><a href="/usuarios/registro">Registrar otro usuario</a></p>
+                <p><a href="/">Volver al Inicio</a></p>
+            </main>
+        </body>
+        </html>
+    """, status_code=status.HTTP_201_CREATED)
 
-@app.delete("/usuarios/{cedula}", tags=["Usuarios"])
-def delete_usuario(cedula: str, session: Session = Depends(get_session)):
-    """Eliminación Lógica (Soft Delete): Cambia el estado del Usuario a inactivo (False)."""
-    usuario = session.get(Usuario, cedula)
-    if not usuario or usuario.estado == False:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado o ya inactivo.")
-
-    usuario.estado = False # Soft Delete
-    session.add(usuario)
-    session.commit()
-    
-    return {"message": f"Usuario con cédula {cedula} ha sido marcado como inactivo."}
+@app.get("/usuarios/registro", tags=["Usuarios - Frontend"])
+def get_registro_usuario(request: Request):
+    """Muestra el formulario HTML para el registro de un nuevo usuario."""
+    return templates.TemplateResponse("usuario.html", {"request": request, "titulo_pagina": "Registrar Usuario"})
 
 # =================================================================
 # 4. ENDPOINTS PARA VEHÍCULO (CRUD Completo)
@@ -297,3 +325,5 @@ def read_compra(compra_id: int, session: Session = Depends(get_session)):
 @app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Bienvenido a AutoSeguro360 - API Avanzada. Consulta /docs para ver los endpoints."}
+
+    
