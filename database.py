@@ -1,18 +1,29 @@
-from sqlmodel import create_engine, SQLModel, Session
-from models import Vehiculo, Usuario, DetalleSeguroVehiculo # Importar todos los modelos para la metadata
+# database.py
+from sqlmodel import SQLModel, create_engine, Session
 
-# Nombre del archivo de base de datos
-SQLITE_FILE_NAME = "autoseguro360.db"
-sqlite_url = f"sqlite:///{SQLITE_FILE_NAME}"
+# ---------------------------------------------------------
+# CONFIGURACIÓN DEL MOTOR DE BASE DE DATOS
+# ---------------------------------------------------------
 
-engine = create_engine(sqlite_url, echo=False)
+DATABASE_URL = "sqlite:///database.db"   # Puedes cambiarlo a PostgreSQL luego
+
+engine = create_engine(
+    DATABASE_URL,
+    echo=True,        # Muestra las consultas en consola (útil en desarrollo)
+    connect_args={"check_same_thread": False}  # Necesario para SQLite
+)
+
+# ---------------------------------------------------------
+# CREAR TODAS LAS TABLAS
+# ---------------------------------------------------------
 
 def create_db_and_tables():
-    """Crea la base de datos y todas las tablas definidas en los modelos."""
     SQLModel.metadata.create_all(engine)
 
+# ---------------------------------------------------------
+# DEPENDENCIA — SESIÓN DE BASE DE DATOS
+# ---------------------------------------------------------
+
 def get_session():
-    """Función generadora para obtener una sesión de SQLModel. Usada como dependencia en FastAPI."""
     with Session(engine) as session:
         yield session
-
