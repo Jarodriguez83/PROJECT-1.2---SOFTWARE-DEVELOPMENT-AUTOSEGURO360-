@@ -1,0 +1,18 @@
+/* static/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #004d99; /* Azul oscuro */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Agrega más estilos aquí para cumplir el Punto K */
