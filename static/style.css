@@ -1,18 +1,573 @@
 /* static/style.css */
 
+/* Variables de color para fácil mantenimiento */
+:root {
+    --color-primary: #004d99; /* Azul oscuro - Similar al logo */
+    --color-secondary: #007bff; /* Azul vibrante - Para acentos */
+    --color-green: #25d366; /* Verde WhatsApp */
+    --color-dark: #121212; /* Negro muy oscuro */
+    --color-light: #ffffff;
+    --color-off-white: #f5f5f5; /* Gris muy claro para fondo de filtros */
+    --color-border: #dddddd;
+    --color-footer-bg: #f8f8f8; /* Fondo gris claro del footer */
+    --color-footer-text: #333333;
+    --font-family: 'Roboto', sans-serif;
+}
+
+/* Estilos Globales y Reset */
 body {
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family);
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--color-off-white); /* Fondo general más claro */
+    color: var(--color-dark);
+}
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+a:hover {
+    color: var(--color-secondary);
 }
 
-header {
-    background-color: #004d99; /* Azul oscuro */
-    color: white;
+/* -------------------------------------- */
+/* LAYOUT PRINCIPAL Y COMPACTO */
+/* -------------------------------------- */
+/* El padding del top debe compensar la altura del header para que el contenido empiece justo debajo */
+.content-wrapper {
+    /* Eliminamos el padding-top, ya que el banner empieza en la parte superior */
+    min-height: calc(100vh - 50px);
+}
+
+/* -------------------------------------- */
+/* BARRA DE NAVEGACIÓN SUPERIOR (FIXED) */
+/* -------------------------------------- */
+.header-container {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--color-primary); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background-color: transparent; 
+    color: var(--color-light);
+}
+.logo-text {
+    font-size: 24px;
+    font-family: cursive;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: var(--color-light);
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+.nav-links a {
+    font-family: cursive;
+    font-weight: 300;
+    padding: 5px 0;
+    transition: border-bottom 0.3s;
+}
+.nav-links a:hover {
+    border-bottom: 2px solid orange;
+    color: orange;
+}
+
+/* -------------------------------------- */
+/* SECCIÓN DE BANNER HERO (NUEVO/RESTAURADO) */
+/* -------------------------------------- */
+
+
+/* -------------------------------------- */
+/* SECCIÓN DE FILTROS */
+/* -------------------------------------- */
+.filters-container {
+    max-width: 1200px;
+    margin: 0px auto 20px;
     padding: 20px;
+    background-color: var(--color-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.filters-container h2 {
+    color: var(--color-dark);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 15px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+.filter-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+.filter-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background-color: var(--color-off-white);
+    font-size: 14px;
+    appearance: none; 
+    /* Flecha personalizada en el select */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+}
+
+.price-range {
+    grid-column: span 1; 
+}
+.filter-buttons {
+    grid-column: span 2; 
+    display: flex;
+    align-items: flex-end; 
+    justify-content: flex-end;
+}
+.clear-filters-btn {
+    padding: 10px 20px;
+    background-color: #dc3545; 
+    color: var(--color-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+.clear-filters-btn:hover {
+    background-color: #c82333;
+}
+
+
+/* -------------------------------------- */
+/* SECCIÓN DE RESULTADOS (TARJETAS) */
+/* -------------------------------------- */
+.results-container {
+    max-width: 1200px;
+    margin: 30px auto 100px; 
+    padding: 0 20px;
+}
+.vehicle-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 30px;
+    padding-top: 10px;
+}
+.vehicle-card {
+    background-color: var(--color-light);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.vehicle-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.card-content {
+    padding: 15px;
     text-align: center;
 }
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 10px 0;
+    min-height: 40px; 
+}
 
-/* Agrega más estilos aquí para cumplir el Punto K */
+.card-price {
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
+.price-tag {
+    display: inline-block;
+    background-color: #ffc107; 
+    color: var(--color-dark);
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-around;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 10px;
+}
+
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 5px;
+}
+.btn-buy {
+    background-color: var(--color-green);
+    color: var(--color-light);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+.btn-buy:hover {
+    background-color: #1eaf53;
+}
+.btn-compare {
+    background: none;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.btn-compare:hover {
+    background-color: var(--color-primary);
+    color: var(--color-light);
+}
+
+
+
+/* -------------------------------------- */
+/* FOOTER (Sección de Pie de Página) */
+/* -------------------------------------- */
+.main-footer {
+    background-color: var(--color-footer-bg);
+    color: var(--color-footer-text);
+    padding: 40px 50px 20px;
+    border-top: 1px solid #e0e0e0;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.footer-col h3 {
+    color: var(--color-primary);
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--color-secondary); 
+    padding-bottom: 5px;
+    width: fit-content;
+}
+
+.footer-branding .logo-text {
+    font-size: 28px;
+    color: var(--color-primary);
+}
+.project-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-top: -5px;
+    margin-bottom: 20px;
+}
+.partner-logos img {
+    margin-right: 10px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+.partner-logos img:hover {
+    opacity: 1;
+}
+.payment-icon img {
+    margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-col li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+.footer-col a {
+    color: var(--color-footer-text);
+    display: flex; 
+    align-items: center;
+}
+.footer-col a:hover {
+    color: var(--color-secondary);
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 30px;
+    padding-top: 15px;
+    font-size: 12px;
+    color: #999;
+}
+
+
+/* -------------------------------------- */
+/* RESPONSIVIDAD (Diseño Compacto en Móviles) */
+/* -------------------------------------- */
+@media (max-width: 1200px) {
+    .filters-grid {
+        grid-template-columns: repeat(4, 1fr); 
+    }
+    .price-range {
+        grid-column: span 1;
+    }
+    .filter-buttons {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Banner hero en móviles */
+   
+    /* Ajustes para Header y Contenido Principal */
+    .top-nav { flex-direction: column; gap: 10px; padding: 10px 20px; }
+    .nav-links { gap: 10px; font-size: 14px; }
+    
+    /* Filtros: pasan a 2 columnas */
+    .filters-container { margin-top: 10px; padding: 15px; }
+    .filters-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .price-range {
+        grid-column: span 1;
+    }
+    .filter-buttons {
+        grid-column: span 2;
+        justify-content: center;
+    }
+
+    /* Botones Flotantes: se mueven al fondo */
+    .floating-actions {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+        background-color: var(--color-dark);
+        border-top: 1px solid #333;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        transform: none;
+        z-index: 100;
+    }
+    .action-btn {
+        width: 30%; 
+        padding: 10px;
+        font-size: 12px;
+    }
+    .results-container { margin-bottom: 60px; } 
+
+    /* Footer: pasa a una disposición de 2 columnas */
+    .main-footer { padding: 30px 20px 60px; } 
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    .footer-branding {
+        grid-column: span 2; 
+    }
+}
+
+@media (max-width: 480px) {
+    /* Filtros: pasan a 1 columna */
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+    .price-range, .filter-buttons {
+        grid-column: span 1;
+        justify-content: center;
+    }
+    .clear-filters-btn { width: 100%; }
+
+    /* Footer: pasa a una disposición de 1 columna */
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-branding {
+        grid-column: span 1;
+    }
+    
+    /* Tarjetas: 1 columna, más grandes y prominentes */
+    .vehicle-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* -------------------------------------- */
+/* ESTILOS DE FORMULARIOS (Para registro_usuario.html) */
+/* -------------------------------------- */
+.contenedor-formulario {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: var(--color-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.contenedor-formulario h2 {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-secondary);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+.contenedor-formulario form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.contenedor-formulario form input[type="text"],
+.contenedor-formulario form input[type="email"],
+.contenedor-formulario form input[type="tel"],
+.contenedor-formulario form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.contenedor-formulario form button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 30px;
+    background-color: var(--color-primary);
+    color: var(--color-light);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.contenedor-formulario form button[type="submit"]:hover {
+    background-color: var(--color-secondary);
+}
+
+
+.hero-banner {
+    /* Fondo del banner con degradado y padding */
+    min-height: 500px; /* Altura mínima similar a la imagen */
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/BANNER_VEHICULO.jpeg') center/cover no-repeat;
+    position: relative;
+    color: var(--color-light);
+    padding-top: 100px; /* Espacio para la barra de navegación */
+    background-size: cover;
+}
+
+.hero-image-overlay {
+    padding: 0 50px;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 500px;
+    margin-top: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.new-tag {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+.vehicle-model {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+}
+.slogan {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+/* Precio */
+.price-security {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.price {
+    font-size: 18px;
+    font-weight: 300;
+}
+.amount {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-light);
+}
+
+/* Iconos de Seguridad */
+.security-icons {
+    position: absolute;
+    bottom: 250px; /* Posicionado para que quede debajo del precio */
+    right: 50px;
+    display: flex;
+    gap: 30px;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 5px;
+    font-family: cursive;
+}
+.icon-item {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.2;
+}
+.icon-item p {
+    margin: 5px 0 0 0;
+}
+
+
