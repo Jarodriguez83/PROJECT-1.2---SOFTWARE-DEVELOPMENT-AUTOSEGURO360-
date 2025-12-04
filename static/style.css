@@ -160,66 +160,83 @@ a:hover {
     background-color: #c82333;
 }
 
-
 /* -------------------------------------- */
-/* SECCIÓN DE RESULTADOS (TARJETAS) */
+/* SECCIÓN DE RESULTADOS (TARJETAS DINÁMICAS) */
 /* -------------------------------------- */
 .results-container {
     max-width: 1200px;
-    margin: 30px auto 100px; 
+    margin: 30px auto 100px; /* Margen inferior para el footer y botones flotantes */
     padding: 0 20px;
+    font-family: cursive;
+    font-weight: 500;
+}
+.results-container h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 25px;
 }
 .vehicle-cards-grid {
+    /* Define un layout de cuadrícula responsivo */
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 30px;
+    gap: 30px; /* Espacio entre tarjetas */
     padding-top: 10px;
 }
 .vehicle-card {
-    background-color: var(--color-light);
+    background-color: var(--color-light); /* Fondo blanco */
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .vehicle-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card-image img {
     width: 100%;
-    height: auto;
+    height: 200px; /* Altura fija para las imágenes */
     display: block;
-    object-fit: cover;
+    object-fit: cover; /* Asegura que la imagen cubra el contenedor */
     border-bottom: 1px solid var(--color-border);
 }
 
 .card-content {
-    padding: 15px;
+    padding: 1px;
     text-align: center;
 }
 .card-title {
     font-size: 16px;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-dark); /* Color oscuro para el título */
     margin: 10px 0;
-    min-height: 40px; 
+    min-height: 40px; /* Asegura altura consistente para títulos largos */
+    font-family: cursive;
+    line-height: -90px;
+    font-weight: 400;
+    margin-bottom: -5px;
 }
 
+/* Sección de Precio */
 .card-price {
     padding: 5px 0;
     margin-bottom: 10px;
+    font-family: cursive;
 }
 .price-tag {
     display: inline-block;
-    background-color: #ffc107; 
+    background-color: #ffc107; /* Amarillo/Dorado para el precio (Similar al diseño de referencia) */
     color: var(--color-dark);
-    font-weight: 700;
+    font-weight: 400;
     padding: 5px 15px;
     border-radius: 4px;
+    margin-top: -40px;
+    font-family: cursive;
 }
 
+/* Sección de Detalles */
 .card-details {
     display: flex;
     justify-content: space-around;
@@ -228,8 +245,11 @@ a:hover {
     margin-bottom: 15px;
     border-top: 1px solid var(--color-border);
     padding-top: 10px;
+    font-family: cursive;
+    font-weight: 1000;
 }
 
+/* Botones de Acción */
 .card-actions {
     display: flex;
     flex-direction: column;
@@ -237,7 +257,7 @@ a:hover {
     padding-top: 5px;
 }
 .btn-buy {
-    background-color: var(--color-green);
+    background-color: #004d99; /* Verde para Comprar (CTA principal) */
     color: var(--color-light);
     border: none;
     padding: 10px;
@@ -245,27 +265,24 @@ a:hover {
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.2s;
+    text-align: center;
+    font-family: cursive;
 }
 .btn-buy:hover {
-    background-color: #1eaf53;
+    background-color: orange;
+    color: black;
 }
 .btn-compare {
     background: none;
     color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s, color 0.2s;
+    border: 1px;  
+    font-family: cursive;
+    margin-bottom: 20px;
 }
 .btn-compare:hover {
-    background-color: var(--color-primary);
-    color: var(--color-light);
+    background-color: #004d99;
+    color: white;
 }
-
-
-
 /* FOOTER */
 .main-footer {
     background-color: var(--color-footer-bg);
@@ -663,4 +680,147 @@ a:hover {
 .action-links a {
     color: var(--color-secondary);
     font-weight: 500;
+}
+
+
+
+
+
+/* -------------------------------------- */
+/* SECCIÓN DE FILTROS (Buscador Simplificado) */
+/* -------------------------------------- */
+.filters-container {
+    max-width: 1200px;
+    margin: 0px auto 20px;
+    padding: 20px;
+    background-color: var(--color-light); /* Fondo blanco */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra suave */
+}
+.filters-container h2 {
+    color: var(--color-dark);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+/* Estilo del contenedor de la forma simplificada */
+.filters-simplified {
+    display: grid;
+    /* 4 columnas: 1 para texto, 2 para selectores y 1 para botones */
+    grid-template-columns: 2fr 1fr 1fr 1fr; 
+    gap: 15px;
+    align-items: flex-end; /* Alinea los elementos al inicio */
+}
+
+/* El campo de texto de búsqueda libre ocupa más espacio en el grid */
+.text-search-field {
+    grid-column: span 1; 
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+.filter-group label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+/* Estilos para el campo de texto y selectores */
+.filter-group select,
+.filter-group input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    background-color: var(--color-off-white);
+    font-size: 14px;
+    /* Solo para selectores */
+    appearance: none; 
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+}
+/* Sobreescribir el fondo para el input de texto */
+.filter-group input[type="text"] {
+    background-image: none;
+    background-color: var(--color-light); 
+}
+
+
+.filter-buttons {
+    grid-column: span 1; /* Los botones ocupan la última columna */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end; /* Alinea los botones a la derecha */
+    justify-content: flex-end; /* Empuja los botones hacia abajo */
+    height: 100%; /* Ocupa toda la altura de la fila */
+}
+
+.apply-filters-btn {
+    padding: 10px 20px;
+    background-color: var(--color-primary); /* Azul oscuro principal para Buscar */
+    color: var(--color-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%; 
+    transition: background-color 0.3s;
+}
+.apply-filters-btn:hover {
+    background-color: var(--color-secondary);
+}
+.clear-filters-btn {
+    padding: 10px 20px;
+    background-color: #dc3545; /* Rojo para limpiar */
+    color: var(--color-light);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+.clear-filters-btn:hover {
+    background-color: #c82333;
+}
+
+/* -------------------------------------- */
+/* RESPONSIVIDAD DEL BUSCADOR */
+/* -------------------------------------- */
+@media (max-width: 1200px) {
+    .filters-simplified {
+        grid-template-columns: repeat(3, 1fr); /* Pasa a 3 columnas */
+    }
+    .text-search-field {
+        grid-column: span 3; /* El campo de texto ocupa las 3 columnas */
+    }
+    .filter-buttons {
+        grid-column: span 3; /* Los botones se extienden al ancho total debajo de los filtros */
+        flex-direction: row; /* Botones en fila */
+    }
+    .apply-filters-btn, .clear-filters-btn {
+        width: 50%;
+    }
+}
+@media (max-width: 768px) {
+    .filters-simplified {
+        grid-template-columns: 1fr; /* Pasa a 1 columna */
+    }
+    .text-search-field {
+        grid-column: span 1;
+    }
+    .filter-group {
+        grid-column: span 1;
+    }
+    .filter-buttons {
+        grid-column: span 1;
+        flex-direction: column; /* Botones vuelven a columna */
+    }
+    .apply-filters-btn, .clear-filters-btn {
+        width: 100%;
+    }
 }

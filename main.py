@@ -8,7 +8,9 @@ Define los endpoints CRUD para Usuario, Vehiculo, FichaTecnica y Compra.
 #LIBRERÍAS PARA EL USO DE SUPABASE
 from datetime import datetime 
 import shutil 
+from fastapi.params import Query
 from httpx import request
+from sqlalchemy import or_
 from supabase import create_client, Client # NUEVO: Cliente Supabase
 from starlette.requests import Request # Asegúrate de tener esta importación
 
@@ -37,11 +39,6 @@ from models import (
     SQLModel # Importar SQLModel para la definición de esquemas relacionales
 )
 
-# =================================================================
-# 1. Definición de Esquemas de Lectura con Relaciones
-#    Necesarios para que FastAPI pueda devolver los datos completos
-# =================================================================
-
 # Esquemas de Lectura Anidados para evitar recursión
 class CompraReadSimple(CompraRead):
     pass
@@ -62,9 +59,7 @@ class CompraReadRel(CompraRead):
     pass
 
 
-# =================================================================
 # 2. Inicialización de la Aplicación y Evento de Inicio
-# =================================================================
 
 app = FastAPI(
     title="AutoSeguro360 - API Avanzada",
@@ -92,16 +87,81 @@ def on_startup():
     """Ejecuta la creación de la base de datos y tablas al iniciar la app."""
     create_db_and_tables()
 
+
 @app.get("/", tags=["Root - Frontend"])
-def homepage(request: Request):
+def homepage(
+    request: Request, 
+    session: Session = Depends(get_session),
+    # Parámetros de búsqueda y filtrado (aceptamos strings vacíos)
+    busqueda_texto: Optional[str] = Query(None, description="Texto de búsqueda libre (Marca, Línea)"),
+    anio_filtro: Optional[str] = Query(None, description="Filtrar por año de modelo"),
+    ncap_filtro: Optional[str] = Query(None, description="Filtrar por calificación Latin NCAP mínima (0-5)"),
+    precio_max: Optional[str] = Query(None, description="Filtrar por precio máximo"),
+):
     """
-    Sirve la página de inicio (index.html). 
-    Recibe el objeto 'request' para poder generar URLs relativas.
+    Sirve la página de inicio (index.html) con el explorador de vehículos, 
+    aplicando filtros de búsqueda desde la URL.
     """
-    # El diccionario de contexto se pasa al template (ej. el título de la página)
+    
+    # 🚨 LÓGICA DE CONVERSIÓN Y VALIDACIÓN NUMÉRICA PARA EVITAR ERRORES DE PARSEO
+    
+    anio_filtro_num: Optional[int] = None
+    ncap_filtro_num: Optional[int] = None
+    precio_max_num: Optional[float] = None
+    
+    try:
+        # Intentamos convertir el año si no está vacío
+        if anio_filtro and anio_filtro != "":
+            anio_filtro_num = int(anio_filtro)
+            
+        # Intentamos convertir la calificación NCAP si no está vacía
+        if ncap_filtro and ncap_filtro != "":
+            ncap_filtro_num = int(ncap_filtro)
+            
+        # Intentamos convertir el precio máximo si no está vacío
+        if precio_max and precio_max != "":
+            precio_max_num = float(precio_max)
+            
+    except ValueError:
+        # Si la conversión a int/float falla (ej: el usuario escribe "hola"), lanzamos un error claro.
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Error de formato: Los filtros de Año, NCAP y Precio Máximo deben ser números válidos."
+        )
+    
+    # CONSULTA BASE: VEHÍCULOS ACTIVOS
+    statement = select(Vehiculo).where(Vehiculo.estado == True)
+    
+    # Aplicar Búsqueda por Texto (Busca en Marca O Línea)
+    if busqueda_texto:
+        search_term = f"%{busqueda_texto}%"
+        # Usamos or_ para buscar en Marca o Línea (case-insensitive)
+        statement = statement.where(or_(
+            Vehiculo.marca.ilike(search_term), 
+            Vehiculo.linea.ilike(search_term)
+        ))
+    
+    # Aplicar Filtros Específicos usando las variables numéricas
+    if anio_filtro_num is not None:
+        statement = statement.where(Vehiculo.modelo == anio_filtro_num)
+    
+    if ncap_filtro_num is not None:
+        statement = statement.where(Vehiculo.nivel_seguridad >= ncap_filtro_num)
+        
+    if precio_max_num is not None:
+        statement = statement.where(Vehiculo.precio <= precio_max_num)
+    
+    vehicles = session.exec(statement).all()
+    
     context = {
         "request": request,
-        "titulo_pagina": "AUTOSEGURO 360 - PÁGINA INICIO"
+        "titulo_pagina": "AutoSeguro360 - Explorador de Vehículos",
+        "vehicles": vehicles, 
+        # Pasamos los valores de filtro de vuelta al template para mantener la selección
+        "current_search": busqueda_texto or "",
+        "current_anio": anio_filtro or "",
+        "current_ncap": ncap_filtro or "",
+        "current_precio": precio_max or "",
     }
     return templates.TemplateResponse("index.html", context)
 
@@ -394,7 +454,7 @@ def get_registro_compra(request: Request):
     }
     return templates.TemplateResponse("registro_compra.html", context)
 
-    
+
 @app.post("/compras/", status_code=status.HTTP_201_CREATED, tags=["Compras"])
 async def create_compra_from_form(
     request: Request,
