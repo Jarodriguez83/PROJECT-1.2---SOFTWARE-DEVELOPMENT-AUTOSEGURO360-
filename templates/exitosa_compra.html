@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO | USUARIO</title>
-    <link rel="shortcut icon" href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg" type="image/x-icon">
+    <title>COMPRA REGISTRADA EXITOSAMENTE</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <link rel="shortcut icon"
+        href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg"
+        type="image/x-icon">
+
 </head>
 
 <body>
@@ -25,30 +28,32 @@
         </nav>
     </header>
     <br><br>
-    <main class="content-wrapper">
-        <div class="contenedor-formulario">
-            <center><h2>REGISTRO DE USUARIO</h2></center>
-            <form action="/usuarios/" method="post" enctype="multipart/form-data">
-                <label for="cedula">CÉDULA (IDENTIFICADOR ÚNICO):</label>
-                <input type="text" id="cedula" name="cedula" placeholder="EJ: 1022334455" required>
-                <label for="nombres_completo">NOMBRE COMPLETO:</label>
-                <input type="text" id="nombres_completo" name="nombres_completo" placeholder="EJ: JUAN PÉREZ RODRÍGUEZ"
-                    required>
-                <label for="celular">CELULAR:</label>
-                <input type="tel" id="celular" name="celular" placeholder="EJ: 3001234567" required>
-                <label for="email">CORREO ELECTRÓNICO:</label>
-                <input type="email" id="email" name="email" placeholder="EJEMPLO@CORREO.COM" required>
-                <label for="edad">EDAD:</label>
-                <input type="number" id="edad" name="edad" placeholder="MÍNIMO 18" required>
-                <label for="categoria_licencia">CATEGORÍA LICENCIA (EJ. A2, B1):</label>
-                <input type="text" id="categoria_licencia" name="categoria_licencia" value="0"
-                    placeholder="ESCRIBE '0' SI NO TIENE LICENCIA" required>
-                <label for="foto_perfil">FOTO DE PERFIL (OPCIONAL - MULTIMEDIA):</label>
-                <input type="file" id="foto_perfil" name="foto_perfil">
-                <button type="submit">REGISTRAR</button>
-            </form>
-        </div>
-    </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- FOOTER  -->
     <footer class="main-footer">
@@ -111,59 +116,7 @@
     </footer>
 </body>
 <style>
-    /* ESTILOS DE FORMULARIOS */
-    .contenedor-formulario {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 30px;
-        background-color: var(--color-light);
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .contenedor-formulario h2 {
-        color: var(--color-primary);
-        border-bottom: 2px solid var(--color-secondary);
-        padding-bottom: 10px;
-        margin-bottom: 25px;
-    }
-
-    .contenedor-formulario form label {
-        display: block;
-        margin-top: 15px;
-        margin-bottom: 5px;
-        font-weight: 500;
-    }
-
-    .contenedor-formulario form input[type="text"],
-    .contenedor-formulario form input[type="email"],
-    .contenedor-formulario form input[type="tel"],
-    .contenedor-formulario form input[type="number"],
-    .contenedor-formulario form input[type="file"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .contenedor-formulario form button[type="submit"] {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        margin-top: 30px;
-        background-color: var(--color-primary);
-        color: var(--color-light);
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .contenedor-formulario form button[type="submit"]:hover {
-        background-color: var(--color-secondary);
-    }
+    
 
 
     /* FOOTER */
