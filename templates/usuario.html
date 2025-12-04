@@ -1,0 +1,113 @@
+<!-- templates/registro_usuario.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo_pagina }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <header class="header-container">
+        <nav class="top-nav">
+            <div class="logo"><span class="logo-text">AutoSeguro360</span></div>
+            <ul class="nav-links">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/docs">API Docs</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content-wrapper">
+        <div class="contenedor-formulario">
+            <h2>Registro de Usuario</h2>
+            
+            <!-- 🚨 CLAVE: action apunta al endpoint POST /usuarios/ y enctype soporta archivos -->
+            <form action="/usuarios/" method="post" enctype="multipart/form-data">
+                
+                <label for="cedula">Cédula (Identificador Único):</label>
+                <input type="text" id="cedula" name="cedula" placeholder="Ej: 1022334455" required>
+
+                <label for="nombres_completo">Nombre Completo:</label>
+                <input type="text" id="nombres_completo" name="nombres_completo" placeholder="Ej: Juan Pérez Rodríguez" required>
+
+                <label for="celular">Celular:</label>
+                <input type="tel" id="celular" name="celular" placeholder="Ej: 3001234567" required>
+
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
+
+                <label for="edad">Edad:</label>
+                <input type="number" id="edad" name="edad" placeholder="Mínimo 18" required>
+
+                <label for="categoria_licencia">Categoría Licencia (Ej. A2, B1):</label>
+                <input type="text" id="categoria_licencia" name="categoria_licencia" value="0" placeholder="Escribe '0' si no tiene licencia" required>
+                
+                <label for="foto_perfil">Foto de Perfil (Opcional - Multimedia):</label>
+                <!-- 🚨 INPUT PARA ARCHIVO -->
+                <input type="file" id="foto_perfil" name="foto_perfil">
+
+                <button type="submit">Registrar Usuario</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo.</p>
+        </div>
+    </footer>
+</body>
+<style>
+    /* -------------------------------------- */
+/* ESTILOS DE FORMULARIOS (Para registro_usuario.html) */
+/* -------------------------------------- */
+.contenedor-formulario {
+    max-width: 600px;
+    margin: 50px auto; /* Centrado en la página */
+    padding: 30px;
+    background-color: var(--color-light); /* Fondo blanco */
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.contenedor-formulario h2 {
+    color: var(--color-primary); /* Azul oscuro */
+    border-bottom: 2px solid var(--color-secondary); /* Azul vibrante */
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+.contenedor-formulario form label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.contenedor-formulario form input[type="text"],
+.contenedor-formulario form input[type="email"],
+.contenedor-formulario form input[type="tel"],
+.contenedor-formulario form input[type="number"],
+.contenedor-formulario form input[type="file"] { /* Incluye el input file */
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.contenedor-formulario form button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 30px;
+    background-color: var(--color-primary); /* Azul oscuro */
+    color: var(--color-light);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.contenedor-formulario form button[type="submit"]:hover {
+    background-color: var(--color-secondary); /* Azul vibrante al pasar el mouse */
+}
+</style>
+</html>
