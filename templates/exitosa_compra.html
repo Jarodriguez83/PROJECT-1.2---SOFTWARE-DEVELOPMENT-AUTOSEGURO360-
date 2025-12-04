@@ -29,32 +29,59 @@
     </header>
     <br><br>
 
+    <main class="content-wrapper">
+        <div class="contenedor-formulario">
+            <center><h2>TRANSACCIÓN REGISTRADA</h2></center>
 
+            <p class="success-message">La compra con ID '{{ compra.id }}' ha sido registrada correctamente.</p>
 
+            <div class="registration-details">
 
+                <div class="data-table-container">
+                    <center><h3>DETALLES DE LA TRANSACCIÓN</h3></center>
+                    <table class="user-data-table">
+                        <tr>
+                            <th>ID DE COMPRA</th>
+                            <td>{{ compra.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>CÉDULA DEL COMPRADOR</th>
+                            <td>{{ compra.comprador_cedula }}</td>
+                        </tr>
+                        <tr>
+                            <th>NOMBRE DEL COMPRADOR</th>
+                            <td>{{ usuario.nombres_completo }}</td>
+                        </tr>
+                        <tr>
+                            <th>PLACA DEL VEHÍCULO</th>
+                            <td>{{ compra.vehiculo_placa }}</td>
+                        </tr>
+                        <tr>
+                            <th>MARCA / LÍNEA</th>
+                            <td>{{ vehiculo.marca }} / {{ vehiculo.linea }}</td>
+                        </tr>
+                        <tr>
+                            <th>PRECIO FINAL</th>
+                            <td>${{ "{:,.2f}".format(compra.precio_final | float) }}</td>
+                        </tr>
+                        <tr>
+                            <th>TIPO DE PAGO</th>
+                            <td>{{ compra.tipo_pago }}</td>
+                        </tr>
+                        <tr>
+                            <th>FECHA</th>
+                            <td>{{ compra.fecha_compra.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <div class="action-links">
+                <p><a href="/compras/registro">REGISTRAR OTRA COMPRA</a></p>
+                <p><a href="/">VOLVER AL INICIO</a></p>
+            </div>
+        </div>
+    </main>
     <!-- FOOTER  -->
     <footer class="main-footer">
         <div class="footer-grid">
@@ -116,8 +143,95 @@
     </footer>
 </body>
 <style>
-    
+    /* ESTILOS DE LA PÁGINA DE REGISTRO EXITOSO*/
+    .contenedor-formulario {
+        max-width: 700px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: var(--color-light);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
+    .contenedor-formulario h2 {
+        color: var(--color-primary);
+        border-bottom: 2px solid var(--color-secondary);
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    .success-message {
+        color: black;
+        font-weight: 500;
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .registration-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background-color: var(--color-off-white);
+    }
+
+    .data-table-container {
+        flex-grow: 1;
+    }
+
+    .data-table-container h3 {
+        font-size: 1.1rem;
+        color: var(--color-primary);
+        margin-bottom: 15px;
+    }
+
+    .user-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    .user-data-table th,
+    .user-data-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .user-data-table th {
+        background-color: #e9e9e9;
+        color: var(--color-dark);
+        width: 40%;
+        font-weight: 700;
+    }
+
+    .user-data-table tr:nth-child(even) th {
+        background-color: #f5f5f5;
+    }
+
+    .action-links {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .action-links a {
+        color: var(--color-secondary);
+        font-weight: 500;
+    }
+
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--color-secondary);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
     /* FOOTER */
     .main-footer {

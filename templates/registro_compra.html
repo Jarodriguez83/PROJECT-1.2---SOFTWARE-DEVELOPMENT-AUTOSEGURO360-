@@ -28,36 +28,35 @@
         </nav>
     </header>
     <br><br>
+    <main class="content-wrapper">
+        <div class="contenedor-formulario">
+            <center><h2>REGISTRO DE COMPRA | TRANSACCIÓN</h2></center>
+            <p>Ingrese los datos de la transacción. El sistema verificará que tanto el usuario como el vehículo existan.
+            </p>
 
+            <form action="/compras/" method="post">
 
+                <center><h3>IDENTIFICADORES Y VERIFICACIÓN</h3></center>
 
+                <label for="comprador_cedula">CÉDULA DEL COMPRADOR:</label>
+                <input type="text" id="comprador_cedula" name="comprador_cedula"
+                    placeholder="CÉDULA DEL USUARIO REGISTRADO" required>
+                <label for="vehiculo_placa">PLACA DEL VEHÍCULO:</label>
+                <input type="text" id="vehiculo_placa" name="vehiculo_placa" placeholder="PLACA DEL VEHÍCULO EN VENTA"
+                    required>
+                <center><h3>DETALLES FINANCIEROS</h3></center>
+                <label for="precio_final">PRECIO FINAL DE VENTA:</label>
+                <input type="number" id="precio_final" name="precio_final" placeholder="Ej: 82900000.00" step="0.01"
+                    required>
 
+                <label for="tipo_pago">TIPO DE PAGO:</label>
+                <input type="text" id="tipo_pago" name="tipo_pago" value="Transferencia"
+                    placeholder="Ej: TRANSFERENCIA, EFECTIVO, ETC" required>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                <button type="submit">REGISTRAR COMPRA</button>
+            </form>
+        </div>
+    </main>
     <!-- FOOTER  -->
     <footer class="main-footer">
         <div class="footer-grid">
@@ -119,8 +118,68 @@
     </footer>
 </body>
 <style>
-    
-    
+    /* ESTILOS DE FORMULARIOS */
+    .contenedor-formulario {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: var(--color-light);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-formulario h2 {
+        color: var(--color-primary);
+        border-bottom: 2px solid var(--color-secondary);
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    .contenedor-formulario h3 {
+        color: var(--color-primary);
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .contenedor-formulario form label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .contenedor-formulario form input[type="text"],
+    .contenedor-formulario form input[type="email"],
+    .contenedor-formulario form input[type="tel"],
+    .contenedor-formulario form input[type="number"],
+    .contenedor-formulario form input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .contenedor-formulario form button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 30px;
+        background-color: var(--color-primary);
+        color: var(--color-light);
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .contenedor-formulario form button[type="submit"]:hover {
+        background-color: var(--color-secondary);
+    }
+
     /* FOOTER */
     .main-footer {
         background-color: var(--color-footer-bg);
