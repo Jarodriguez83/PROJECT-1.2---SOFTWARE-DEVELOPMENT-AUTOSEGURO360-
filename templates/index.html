@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ titulo_pagina }}</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
-    <link rel="shortcut icon" href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg" type="image/x-icon">
+    <link rel="shortcut icon"
+        href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg"
+        type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header class="header-container">
         <nav class="top-nav">
@@ -40,126 +44,130 @@
                     </div>
 
                     <div class="security-icons">
-                        <div class="icon-item">🛡️<p>SISTEMA ANTIBLOQUEO DE FRENOS</p></div>
-                        <div class="icon-item">⚙️<p>CONTROL ELECTRÓNICO DE ESTABILIDAD</p></div>
-                        <div class="icon-item">🚨<p>ALERTA DE COLISIÓN FRONTAL</p></div>
-                        <div class="icon-item">👶<p>SISTEMA DE SUJECIÓN INFANTIL</p></div>
-                        <div class="icon-item">💨<p>SISTEMA DE BOLSA DE AIRE (6)</p></div>
+                        <div class="icon-item">🛡️<p>SISTEMA ANTIBLOQUEO DE FRENOS</p>
+                        </div>
+                        <div class="icon-item">⚙️<p>CONTROL ELECTRÓNICO DE ESTABILIDAD</p>
+                        </div>
+                        <div class="icon-item">🚨<p>ALERTA DE COLISIÓN FRONTAL</p>
+                        </div>
+                        <div class="icon-item">👶<p>SISTEMA DE SUJECIÓN INFANTIL</p>
+                        </div>
+                        <div class="icon-item">💨<p>SISTEMA DE BOLSA DE AIRE (6)</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            </section>
-        <div class="content-wrapper">
-        <!-- 1. SECCIÓN DE FILTROS DE BÚSQUEDA -->
-        <section class="filters-container" id="filtros">
-            <h2>Buscador de Vehículos</h2>
-            <!-- FORMULARIO DE BÚSQUEDA GET: Envía parámetros a la ruta raíz (homepage) -->
-            <form action="/" method="GET" class="filters-grid filters-simplified" id="filter-form">
-                
-                <!-- NUEVO: CAMPO DE TEXTO DE BÚSQUEDA LIBRE -->
-                <div class="filter-group text-search-field">
-                    <label for="busqueda_texto">Marca, Modelo o Línea</label>
-                    <input type="text" id="busqueda_texto" name="busqueda_texto" 
-                           placeholder="Ej: Chevrolet Captiva" 
-                           value="{{ current_search }}"
-                           >
-                </div>
-
-                <!-- FILTRO AÑO (MODELO) -->
-                <div class="filter-group">
-                    <label for="anio_filtro">Año (Exacto)</label>
-                    <!-- NAME: anio_filtro -->
-                    <select id="anio_filtro" name="anio_filtro">
-                        <option value="" {% if current_anio == "" %}selected{% endif %}>Cualquier Año</option>
-                        <option value="2024" {% if current_anio == "2024" %}selected{% endif %}>2024</option>
-                        <option value="2023" {% if current_anio == "2023" %}selected{% endif %}>2023</option>
-                        <option value="2022" {% if current_anio == "2022" %}selected{% endif %}>2022</option>
-                        <option value="2021" {% if current_anio == "2021" %}selected{% endif %}>2021</option>
-                        <option value="2020" {% if current_anio == "2020" %}selected{% endif %}>2020</option>
-                    </select>
-                </div>
-                
-                <!-- FILTRO NCAP (Nivel de Seguridad Mínimo) -->
-                <div class="filter-group">
-                    <label for="ncap_filtro">Seguridad (NCAP Min)</label>
-                    <!-- NAME: ncap_filtro -->
-                    <select id="ncap_filtro" name="ncap_filtro">
-                        <option value="" {% if current_ncap == "" %}selected{% endif %}>Cualquier Nivel</option>
-                        <option value="4" {% if current_ncap == "4" %}selected{% endif %}>4 Estrellas o más</option>
-                        <option value="3" {% if current_ncap == "3" %}selected{% endif %}>3 Estrellas o más</option>
-                        <option value="2" {% if current_ncap == "2" %}selected{% endif %}>2 Estrellas o más</option>
-                        <option value="1" {% if current_ncap == "1" %}selected{% endif %}>1 Estrella o más</option>
-                    </select>
-                </div>
-                
-                <!-- FILTRO PRECIO MÁXIMO -->
-                <div class="filter-group">
-                    <label for="precio_max">Precio Máximo</label>
-                    <!-- NAME: precio_max -->
-                    <select id="precio_max" name="precio_max">
-                        <option value="" {% if current_precio == "" %}selected{% endif %}>Sin Límite</option>
-                        <option value="50000000" {% if current_precio == "50000000" %}selected{% endif %}>$50,000,000</option>
-                        <option value="100000000" {% if current_precio == "100000000" %}selected{% endif %}>$100,000,000</option>
-                        <option value="200000000" {% if current_precio == "200000000" %}selected{% endif %}>$200,000,000</option>
-                        <option value="500000000" {% if current_precio == "500000000" %}selected{% endif %}>$500,000,000</option>
-                    </select>
-                </div>
-                
-                <div class="filter-buttons">
-                    <!-- Botón de Submit -->
-                    <button type="submit" class="apply-filters-btn">Buscar</button>
-                    <!-- Botón de Limpiar: Usamos JS para resetear el formulario -->
-                    <button type="button" class="clear-filters-btn" id="clear-button">Limpiar</button>
-                </div>
-            </form>
         </section>
+        <div class="content-wrapper">
+            <br><br>
+            <!-- 1. SECCIÓN DE FILTROS DE BÚSQUEDA -->
+            <section class="filters-container" id="filtros">
+                <center>
+                    <h2>BUSCADOR DE VEHÍCULOS | FILTROS</h2>
+                </center>
+                <!-- FORMULARIO DE BÚSQUEDA GET: Envía parámetros a la ruta raíz (homepage) -->
+                <form action="/" method="GET" class="filters-grid filters-simplified" id="filter-form">
 
-        <!-- 2. SECCIÓN DE RESULTADOS (CATÁLOGO DINÁMICO) -->
-        <section class="results-container">
-            <center><h2>VEHÍCULOS DISPONIBLES | VENTA </h2></center>
-            <div class="vehicle-cards-grid">
-                
-                {# Lógica Jinja2: Itera sobre la lista de vehículos #}
-                {% if vehicles %}
+                    <div class="filter-group text-search-field">
+                        <label for="busqueda_texto">MARCA, MODELO O LÍNEA</label>
+                        <input type="text" id="busqueda_texto" name="busqueda_texto" placeholder="Ej: Chevrolet Captiva"
+                            value="{{ current_search }}">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="anio_filtro">AÑO</label>
+                        <select id="anio_filtro" name="anio_filtro">
+                            <option value="" {% if current_anio=="" %}selected{% endif %}>Cualquier Año</option>
+                            <option value="2024" {% if current_anio=="2024" %}selected{% endif %}>2024</option>
+                            <option value="2023" {% if current_anio=="2023" %}selected{% endif %}>2023</option>
+                            <option value="2022" {% if current_anio=="2022" %}selected{% endif %}>2022</option>
+                            <option value="2021" {% if current_anio=="2021" %}selected{% endif %}>2021</option>
+                            <option value="2020" {% if current_anio=="2020" %}selected{% endif %}>2020</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="ncap_filtro">SEGURIDAD (NCAP)</label>
+                        <select id="ncap_filtro" name="ncap_filtro">
+                            <option value="" {% if current_ncap=="" %}selected{% endif %}>Cualquier Nivel</option>
+                            <option value="4" {% if current_ncap=="4" %}selected{% endif %}>4 +</option>
+                            <option value="3" {% if current_ncap=="3" %}selected{% endif %}>3 +</option>
+                            <option value="2" {% if current_ncap=="2" %}selected{% endif %}>2 +</option>
+                            <option value="1" {% if current_ncap=="1" %}selected{% endif %}>1 +</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="precio_max">PRECIO MÁXIMO</label>
+                        <select id="precio_max" name="precio_max">
+                            <option value="" {% if current_precio=="" %}selected{% endif %}>Sin Límite</option>
+                            <option value="50000000" {% if current_precio=="50000000" %}selected{% endif %}>$50,000,000
+                            </option>
+                            <option value="100000000" {% if current_precio=="100000000" %}selected{% endif %}>
+                                $100,000,000</option>
+                            <option value="200000000" {% if current_precio=="200000000" %}selected{% endif %}>
+                                $200,000,000</option>
+                            <option value="500000000" {% if current_precio=="500000000" %}selected{% endif %}>
+                                $500,000,000</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-buttons">
+                        <button type="submit" class="apply-filters-btn">BUSCAR</button>
+                        <button type="button" class="clear-filters-btn" id="clear-button">LIMPIAR</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 2. SECCIÓN DE RESULTADOS (CATÁLOGO DINÁMICO) -->
+            <section class="results-container">
+                <center>
+                    <h2>VEHÍCULOS DISPONIBLES | VENTA </h2>
+                </center>
+                <div class="vehicle-cards-grid">
+
+                    {# Lógica Jinja2: Itera sobre la lista de vehículos #}
+                    {% if vehicles %}
                     {% for vehiculo in vehicles %}
-                        <div class="vehicle-card">
-                            <div class="card-image">
-                                <!-- Imagen del vehículo: usa la URL de Supabase si existe, sino un placeholder -->
-                                <img src="{{ vehiculo.foto_url or 'https://placehold.co/300x200/555/ffff?text=IMAGEN+NO+DISPONIBLE' }}" 
-                                     alt="{{ vehiculo.marca }} {{ vehiculo.linea }}"
-                                     onerror="this.onerror=null; this.src='https://placehold.co/300x200/555/fff?text=IMAGEN+ERROR';"
-                                >
+                    <div class="vehicle-card">
+                        <div class="card-image">
+                            <!-- Imagen del vehículo: usa la URL de Supabase si existe, sino un placeholder -->
+                            <img src="{{ vehiculo.foto_url or 'https://placehold.co/300x200/555/ffff?text=IMAGEN+NO+DISPONIBLE' }}"
+                                alt="{{ vehiculo.marca }} {{ vehiculo.linea }}"
+                                onerror="this.onerror=null; this.src='https://placehold.co/300x200/555/fff?text=IMAGEN+ERROR';">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">{{ vehiculo.marca }} {{ vehiculo.linea }}</h3>
+                            <div class="card-price">
+                                <span class="price-tag">PRECIO: ${{ "{:,.0f}".format(vehiculo.precio | float) }}</span>
                             </div>
-                            <div class="card-content">
-                                <h3 class="card-title">{{ vehiculo.marca }} {{ vehiculo.linea }}</h3>
-                                <div class="card-price">
-                                    <span class="price-tag">PRECIO: ${{ "{:,.0f}".format(vehiculo.precio | float) }}</span>
-                                </div>
-                                <div class="card-details">
-                                    <span>AÑO: {{ vehiculo.modelo }}</span>
-                                    <span>NCAP: {{ vehiculo.nivel_seguridad }}/5</span>
-                                    <span>PLACA: {{ vehiculo.placa }}</span>
-                                </div>
-                                <div class="card-actions">
-                                    <a href="/compras/registro?placa={{ vehiculo.placa }}" class="btn-buy">COMPRAR VEHICULO</a>
-                                    <button class="btn-compare">REGISTRAR USUARIO</button>
-                                </div>
+                            <div class="card-details">
+                                <span>AÑO: {{ vehiculo.modelo }}</span>
+                                <span>NCAP: {{ vehiculo.nivel_seguridad }}/5</span>
+                                <span>PLACA: {{ vehiculo.placa }}</span>
+                            </div>
+                            <div class="card-actions">
+                                <a href="/compras/registro?placa={{ vehiculo.placa }}" class="btn-buy">COMPRAR
+                                    VEHICULO</a>
+                                <button class="btn-compare">REGISTRAR USUARIO</button>
                             </div>
                         </div>
+                    </div>
                     {% endfor %}
-                {% else %}
+                    {% else %}
                     <!-- Mensaje si no hay resultados -->
-                    <p class="no-results-message">No hay vehículos disponibles para la venta en este momento. ¡Registra uno para empezar!</p>
+                    <p class="no-results-message">No hay vehículos disponibles para la venta en este momento. ¡Registra
+                        uno para empezar!</p>
                     <p><a href="/vehiculos/registro">Registrar Nuevo Vehículo</a></p>
-                {% endif %}
+                    {% endif %}
 
-            </div>
-        </section>
+                </div>
+            </section>
     </main>
     <!-- FOOTER  -->
     <footer class="main-footer">
         <div class="footer-grid">
-            
+
             <div class="footer-col footer-branding">
                 <div class="footer-logo">
                     <span class="logo-text">AUTOSEGURO360</span>
@@ -169,8 +177,12 @@
                 <h3>PÁGINAS RELACIONADAS</h3>
                 <div class="partner-logos">
                     <center>
-                    <a href="https://www.latinncap.com/es/" target="_blank"><img src="https://placehold.co/60x30/004d99/ffffff?text=NCAP" alt="NCAP" target="_blank"></a> <br>
-                    <a href="https://mintransporte.gov.co/" target="_blank"><img src="https://placehold.co/180x30/004d99/ffffff?text=MINTRANSPORTE" alt="MINTRANSPORTE"></a>
+                        <a href="https://www.latinncap.com/es/" target="_blank"><img
+                                src="https://placehold.co/60x30/004d99/ffffff?text=NCAP" alt="NCAP" target="_blank"></a>
+                        <br>
+                        <a href="https://mintransporte.gov.co/" target="_blank"><img
+                                src="https://placehold.co/180x30/004d99/ffffff?text=MINTRANSPORTE"
+                                alt="MINTRANSPORTE"></a>
                     </center>
                 </div>
             </div>
@@ -206,9 +218,11 @@
                 </div>
             </div>
         </div>
-                <div class="footer-bottom">
-            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo. Todos los derechos reservados.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo. Todos los derechos
+                reservados.</p>
         </div>
     </footer>
 </body>
+
 </html>

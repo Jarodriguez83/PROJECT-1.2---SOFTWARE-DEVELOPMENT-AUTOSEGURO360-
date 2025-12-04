@@ -97,15 +97,18 @@ a:hover {
     max-width: 1200px;
     margin: 0px auto 20px;
     padding: 20px;
-    background-color: var(--color-light);
+    background-color: orange; 
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: cursive;
 }
 .filters-container h2 {
     color: var(--color-dark);
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 20px;
+    margin-top: -10px;
+    font-family: cursive;
 }
 .filters-grid {
     display: grid;
@@ -145,10 +148,11 @@ a:hover {
     display: flex;
     align-items: flex-end; 
     justify-content: flex-end;
+    width: 100%;
 }
 .clear-filters-btn {
     padding: 10px 20px;
-    background-color: #dc3545; 
+    background-color: orange; 
     color: var(--color-light);
     border: none;
     border-radius: 5px;
@@ -157,7 +161,7 @@ a:hover {
     transition: background-color 0.3s;
 }
 .clear-filters-btn:hover {
-    background-color: #c82333;
+    background-color: orange;
 }
 
 /* -------------------------------------- */
@@ -761,21 +765,18 @@ a:hover {
 
 .apply-filters-btn {
     padding: 10px 20px;
-    background-color: var(--color-primary); /* Azul oscuro principal para Buscar */
+    background-color: #004d99; /* Azul oscuro principal para Buscar */
     color: var(--color-light);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 500;
     width: 100%; 
-    transition: background-color 0.3s;
 }
-.apply-filters-btn:hover {
-    background-color: var(--color-secondary);
-}
+
 .clear-filters-btn {
     padding: 10px 20px;
-    background-color: #dc3545; /* Rojo para limpiar */
+    background-color: orange; /* Rojo para limpiar */
     color: var(--color-light);
     border: none;
     border-radius: 5px;
@@ -784,9 +785,7 @@ a:hover {
     width: 100%;
     transition: background-color 0.3s;
 }
-.clear-filters-btn:hover {
-    background-color: #c82333;
-}
+
 
 /* -------------------------------------- */
 /* RESPONSIVIDAD DEL BUSCADOR */
