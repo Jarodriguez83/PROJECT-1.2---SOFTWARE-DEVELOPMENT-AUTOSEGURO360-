@@ -1,10 +1,3 @@
-"""
-main.py
-Autor: Jhon Alexander Rodriguez Redondo
-
-Punto de entrada para la aplicación FastAPI.
-Define los endpoints CRUD para Usuario, Vehiculo, FichaTecnica y Compra.
-"""
 #LIBRERÍAS PARA EL USO DE SUPABASE
 from datetime import datetime 
 import shutil 
@@ -58,9 +51,6 @@ class CompraReadRel(CompraRead):
     # Definición de la compra con datos del usuario y vehículo (simple)
     pass
 
-
-# 2. Inicialización de la Aplicación y Evento de Inicio
-
 app = FastAPI(
     title="AutoSeguro360 - API Avanzada",
     version="1.0.0",
@@ -80,8 +70,6 @@ SUPABASE_BUCKET_NAME = "IMG"
 # CLIENTE SUPABASE INICIALIZADO
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-
-
 @app.on_event("startup")
 def on_startup():
     """Ejecuta la creación de la base de datos y tablas al iniciar la app."""
@@ -92,7 +80,6 @@ def on_startup():
 def homepage(
     request: Request, 
     session: Session = Depends(get_session),
-    # Parámetros de búsqueda y filtrado (aceptamos strings vacíos)
     busqueda_texto: Optional[str] = Query(None, description="Texto de búsqueda libre (Marca, Línea)"),
     anio_filtro: Optional[str] = Query(None, description="Filtrar por año de modelo"),
     ncap_filtro: Optional[str] = Query(None, description="Filtrar por calificación Latin NCAP mínima (0-5)"),
@@ -103,14 +90,14 @@ def homepage(
     aplicando filtros de búsqueda desde la URL.
     """
     
-    # 🚨 LÓGICA DE CONVERSIÓN Y VALIDACIÓN NUMÉRICA PARA EVITAR ERRORES DE PARSEO
+    # LÓGICA DE CONVERSIÓN Y VALIDACIÓN NUMÉRICA PARA EVITAR ERRORES DE PARSEO
     
     anio_filtro_num: Optional[int] = None
     ncap_filtro_num: Optional[int] = None
     precio_max_num: Optional[float] = None
     
     try:
-        # Intentamos convertir el año si no está vacío
+        #CONVERTIR 
         if anio_filtro and anio_filtro != "":
             anio_filtro_num = int(anio_filtro)
             
@@ -177,9 +164,7 @@ def get_registro_usuario(request: Request):
     return templates.TemplateResponse("usuario.html", context)
 
 
-# =================================================================
 # 3. ENDPOINTS PARA USUARIO (CRUD y Formulario)
-# =================================================================
 @app.post("/usuarios/", status_code=status.HTTP_201_CREATED, tags=["Usuarios"])
 async def create_usuario_from_form(
     request: Request, # Se requiere para templates.TemplateResponse
@@ -197,7 +182,6 @@ async def create_usuario_from_form(
     y responde con el HTML de registro exitoso.
     """
     
-    # --- Manejo de la URL Multimedia (Lógica de Subida a Supabase) ---
     foto_url = None
     
     if foto_perfil and foto_perfil.filename:
@@ -207,17 +191,17 @@ async def create_usuario_from_form(
         unique_filename = f"fotos/{cedula}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
         
         try:
-            # 1. Leer el archivo en memoria (Debe ser ASÍNCRONO)
+            #Leer el archivo en memoria (Debe ser ASÍNCRONO)
             file_data = await foto_perfil.read() 
             
-            # 2. Subir el archivo a Supabase Storage
+            #Subir el archivo a Supabase Storage
             response = supabase.storage.from_(SUPABASE_BUCKET_NAME).upload(
                 file=file_data,
                 path=unique_filename,
                 file_options={"content-type": foto_perfil.content_type}
             )
             
-            # 3. Asignar la URL pública generada
+            #Asignar la URL pública generada
             foto_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET_NAME}/{unique_filename}"
             
         except Exception as e:
@@ -228,7 +212,7 @@ async def create_usuario_from_form(
                 detail=f"Error al subir la foto de perfil a Supabase Storage. Verifique permisos RLS o credenciales: {e}"
             )
         
-    # 1. Crear el objeto UsuarioCreate a partir de los datos del formulario
+    #Crear el objeto UsuarioCreate a partir de los datos del formulario
     usuario_data = {
         "cedula": cedula,
         "nombres_completo": nombres_completo,
@@ -245,7 +229,7 @@ async def create_usuario_from_form(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error en la validación de datos: {e}")
 
-    # 2. Comprobar si ya existe
+    #Comprobar si ya existe
     existing_user = session.get(Usuario, db_usuario.cedula)
     if existing_user:
         raise HTTPException(
@@ -253,12 +237,12 @@ async def create_usuario_from_form(
             detail=f"Usuario con cédula {db_usuario.cedula} ya existe."
         )
 
-    # 3. Almacenar en la DB
+    #Almacenar en la DB
     session.add(db_usuario)
     session.commit()
     session.refresh(db_usuario)
     
-    # 4. Devolver una respuesta Template para éxito
+    #Devolver una respuesta Template para éxito
     context = {
         "request": request, 
         "usuario": db_usuario # Pasamos el objeto completo del usuario
@@ -268,10 +252,7 @@ async def create_usuario_from_form(
         context, 
         status_code=status.HTTP_201_CREATED
     )
-# =================================================================
-# 4. ENDPOINTS PARA VEHÍCULO (CRUD Completo)
-# =================================================================
-
+#ENDPOINTS PARA VEHÍCULO (CRUD Completo)
 @app.get("/vehiculos/registro", tags=["Vehiculos - Frontend"])
 def get_registro_vehiculo(request: Request):
     """Muestra el formulario HTML para el registro de un nuevo vehículo."""
@@ -287,16 +268,15 @@ def get_registro_vehiculo(request: Request):
 async def create_vehiculo_from_form(
     request: Request,
     session: Session = Depends(get_session),
-    # Argumentos del formulario Vehiculo
     placa: str = Form(...),
     marca: str = Form(...),
     linea: str = Form(...),
     modelo: int = Form(...),
     precio: float = Form(...),
     nivel_seguridad: int = Form(0),
-    propietario_cedula: Optional[str] = Form(None), # Clave Foránea
+    propietario_cedula: Optional[str] = Form(None), 
     
-    foto_vehiculo: Optional[UploadFile] = File(None), # Archivo Multimedia
+    foto_vehiculo: Optional[UploadFile] = File(None), 
 ):
     """
     Crea un nuevo Vehículo, procesa el formulario, sube la foto a Supabase, 
@@ -329,7 +309,6 @@ async def create_vehiculo_from_form(
                 detail=f"Error al subir la foto del vehículo a Supabase Storage: {e}"
             )
         
-    # 1. Crear el objeto VehiculoCreate (usando la placa como PK)
     vehiculo_data = {
         "placa": placa,
         "marca": marca,
@@ -347,7 +326,6 @@ async def create_vehiculo_from_form(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error en la validación de datos del vehículo: {e}")
 
-    # 2. Comprobar si la placa ya existe
     existing_vehiculo = session.get(Vehiculo, db_vehiculo.placa)
     if existing_vehiculo:
         raise HTTPException(
@@ -355,15 +333,13 @@ async def create_vehiculo_from_form(
             detail=f"Vehículo con placa {db_vehiculo.placa} ya existe."
         )
 
-    # 3. Almacenar en la DB
     session.add(db_vehiculo)
     session.commit()
     session.refresh(db_vehiculo)
     
-    # 4. Devolver una respuesta Template para éxito
     context = {
         "request": request, 
-        "vehiculo": db_vehiculo # Pasamos el objeto Vehiculo
+        "vehiculo": db_vehiculo 
     }
     return templates.TemplateResponse(
         "exitoso_vehiculo.html", 
@@ -400,9 +376,7 @@ def delete_vehiculo(placa: str, session: Session = Depends(get_session)):
     return {"message": f"Vehículo con placa {placa} ha sido marcado como inactivo."}
 
 
-# =================================================================
 # 5. ENDPOINTS PARA FICHA TÉCNICA (Relación 1:1)
-# =================================================================
 
 @app.post("/fichas_tecnicas/", response_model=FichaTecnicaRead, status_code=status.HTTP_201_CREATED, tags=["Ficha Tecnica"])
 def create_ficha_tecnica(ficha: FichaTecnicaCreate, session: Session = Depends(get_session)):
@@ -410,12 +384,12 @@ def create_ficha_tecnica(ficha: FichaTecnicaCreate, session: Session = Depends(g
     Crea la Ficha Técnica para un vehículo existente. 
     Requiere que la 'vehiculo_placa' exista y no tenga ya una ficha.
     """
-    # 1. Verificar si el vehículo existe
+    # Verificar si el vehículo existe
     vehiculo = session.get(Vehiculo, ficha.vehiculo_placa)
     if not vehiculo:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Vehículo con placa {ficha.vehiculo_placa} no encontrado.")
         
-    # 2. Verificar si ya tiene una ficha (Relación 1:1)
+    # Verificar si ya tiene una ficha (Relación 1:1)
     if vehiculo.ficha_tecnica:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Este vehículo ya tiene una Ficha Técnica asociada.")
 
@@ -442,9 +416,7 @@ def update_ficha_tecnica(placa: str, ficha_update: FichaTecnicaUpdate, session: 
     session.refresh(ficha)
     return ficha
 
-# =================================================================
 # 6. ENDPOINTS PARA COMPRA (Transacciones N:M)
-# =================================================================
 @app.get("/compras/registro", tags=["Compras - Frontend"])
 def get_registro_compra(request: Request):
     """Muestra el formulario HTML para registrar una nueva compra/transacción."""
@@ -469,7 +441,7 @@ async def create_compra_from_form(
     Realiza la validación cruzada: El Usuario y el Vehículo deben existir y estar activos.
     """
     
-    # 1. Verificar existencia y estado del Usuario (Comprador)
+    #Verificar existencia y estado del Usuario (Comprador)
     usuario = session.get(Usuario, comprador_cedula)
     if not usuario or usuario.estado == False:
         raise HTTPException(
@@ -477,7 +449,7 @@ async def create_compra_from_form(
             detail=f"Usuario (Comprador) con cédula {comprador_cedula} no existe o está inactivo."
         )
 
-    # 2. Verificar existencia y estado del Vehículo
+    #Verificar existencia y estado del Vehículo
     vehiculo = session.get(Vehiculo, vehiculo_placa)
     if not vehiculo or vehiculo.estado == False:
         raise HTTPException(
@@ -485,7 +457,7 @@ async def create_compra_from_form(
             detail=f"Vehículo con placa {vehiculo_placa} no existe o está inactivo."
         )
         
-    # 3. Crear el objeto Compra
+    #Crear el objeto Compra
     compra_data = {
         "comprador_cedula": comprador_cedula,
         "vehiculo_placa": vehiculo_placa,
@@ -499,12 +471,12 @@ async def create_compra_from_form(
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error en la validación de datos de Compra: {e}")
         
-    # 4. Almacenar en la DB
+    #Almacenar en la DB
     session.add(db_compra)
     session.commit()
     session.refresh(db_compra)
     
-    # 5. Devolver una respuesta Template para éxito
+    #Devolver una respuesta Template para éxito
     context = {
         "request": request, 
         "compra": db_compra,
@@ -524,7 +496,7 @@ def create_compra(compra: CompraCreate, session: Session = Depends(get_session))
     Registra una nueva Transacción de Compra. 
     Requiere que el Usuario (comprador_cedula) y el Vehículo (vehiculo_placa) existan.
     """
-    # 1. Verificar existencia del Usuario
+    #Verificar existencia del Usuario
     usuario = session.get(Usuario, compra.comprador_cedula)
     if not usuario or usuario.estado == False:
         raise HTTPException(
@@ -532,7 +504,7 @@ def create_compra(compra: CompraCreate, session: Session = Depends(get_session))
             detail=f"Usuario (Comprador) con cédula {compra.comprador_cedula} no existe o está inactivo."
         )
 
-    # 2. Verificar existencia del Vehículo
+    #Verificar existencia del Vehículo
     vehiculo = session.get(Vehiculo, compra.vehiculo_placa)
     if not vehiculo or vehiculo.estado == False:
         raise HTTPException(
@@ -562,10 +534,7 @@ def read_compra(compra_id: int, session: Session = Depends(get_session)):
     return compra
 
 
-# =================================================================
-# 7. ENDPOINT RAIZ
-# =================================================================
-
+#ENDPOINT RAIZ
 @app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Bienvenido a AutoSeguro360 - API Avanzada. Consulta /docs para ver los endpoints."}
