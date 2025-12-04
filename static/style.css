@@ -266,9 +266,7 @@ a:hover {
 
 
 
-/* -------------------------------------- */
-/* FOOTER (Sección de Pie de Página) */
-/* -------------------------------------- */
+/* FOOTER */
 .main-footer {
     background-color: var(--color-footer-bg);
     color: var(--color-footer-text);
@@ -452,18 +450,22 @@ a:hover {
     background-color: var(--color-light);
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: cursive;
 }
 .contenedor-formulario h2 {
     color: var(--color-primary);
     border-bottom: 2px solid var(--color-secondary);
     padding-bottom: 10px;
     margin-bottom: 25px;
+    font-family: cursive;
 }
 .contenedor-formulario form label {
     display: block;
     margin-top: 15px;
     margin-bottom: 5px;
     font-weight: 500;
+    font-family: cursive;
+
 }
 .contenedor-formulario form input[type="text"],
 .contenedor-formulario form input[type="email"],
@@ -474,6 +476,8 @@ a:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+    font-family: cursive;
+
 }
 .contenedor-formulario form button[type="submit"] {
     display: block;
@@ -487,9 +491,11 @@ a:hover {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-family: cursive;
 }
 .contenedor-formulario form button[type="submit"]:hover {
     background-color: var(--color-secondary);
+    font-family: cursive;
 }
 
 

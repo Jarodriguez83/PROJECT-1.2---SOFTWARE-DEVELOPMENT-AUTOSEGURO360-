@@ -122,7 +122,7 @@ def get_registro_usuario(request: Request):
 # =================================================================
 @app.post("/usuarios/", status_code=status.HTTP_201_CREATED, tags=["Usuarios"])
 async def create_usuario_from_form(
-    request: Request, # 🚨 Se requiere para templates.TemplateResponse
+    request: Request, # Se requiere para templates.TemplateResponse
     session: Session = Depends(get_session),
     cedula: str = Form(...),
     nombres_completo: str = Form(...),
@@ -142,7 +142,7 @@ async def create_usuario_from_form(
     
     if foto_perfil and foto_perfil.filename:
         
-        # 🚨 PROCESO DE SUBIDA REAL A SUPABASE STORAGE
+        # PROCESO DE SUBIDA REAL A SUPABASE STORAGE
         file_extension = foto_perfil.filename.split('.')[-1]
         unique_filename = f"fotos/{cedula}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
         
@@ -198,7 +198,7 @@ async def create_usuario_from_form(
     session.commit()
     session.refresh(db_usuario)
     
-    # 4. 🚨 Devolver una respuesta Template para éxito
+    # 4. Devolver una respuesta Template para éxito
     context = {
         "request": request, 
         "usuario": db_usuario # Pasamos el objeto completo del usuario
@@ -212,12 +212,82 @@ async def create_usuario_from_form(
 # 4. ENDPOINTS PARA VEHÍCULO (CRUD Completo)
 # =================================================================
 
-@app.post("/vehiculos/", response_model=VehiculoRead, status_code=status.HTTP_201_CREATED, tags=["Vehiculos"])
-def create_vehiculo(vehiculo: VehiculoCreate, session: Session = Depends(get_session)):
-    """Crea un nuevo Vehículo. La Placa es la clave primaria."""
-    db_vehiculo = Vehiculo.model_validate(vehiculo)
+@app.get("/vehiculos/registro", tags=["Vehiculos - Frontend"])
+def get_registro_vehiculo(request: Request):
+    """Muestra el formulario HTML para el registro de un nuevo vehículo."""
+    context = {
+        "request": request,
+        "titulo_pagina": "Registro de Nuevo Vehículo"
+    }
+    return templates.TemplateResponse("registro_vehiculo.html", context)
+
+
+
+@app.post("/vehiculos/", status_code=status.HTTP_201_CREATED, tags=["Vehiculos"])
+async def create_vehiculo_from_form(
+    request: Request,
+    session: Session = Depends(get_session),
+    # Argumentos del formulario Vehiculo
+    placa: str = Form(...),
+    marca: str = Form(...),
+    linea: str = Form(...),
+    modelo: int = Form(...),
+    precio: float = Form(...),
+    nivel_seguridad: int = Form(0),
+    propietario_cedula: Optional[str] = Form(None), # Clave Foránea
     
-    # Comprobar si ya existe un vehículo con esa placa
+    foto_vehiculo: Optional[UploadFile] = File(None), # Archivo Multimedia
+):
+    """
+    Crea un nuevo Vehículo, procesa el formulario, sube la foto a Supabase, 
+    y responde con el HTML de registro exitoso.
+    """
+    
+    foto_url = None
+    
+    if foto_vehiculo and foto_vehiculo.filename:
+        
+        # 🚨 PROCESO DE SUBIDA REAL A SUPABASE STORAGE
+        file_extension = foto_vehiculo.filename.split('.')[-1]
+        unique_filename = f"vehiculos/{placa}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
+        
+        try:
+            file_data = await foto_vehiculo.read() 
+            
+            response = supabase.storage.from_(SUPABASE_BUCKET_NAME).upload(
+                file=file_data,
+                path=unique_filename,
+                file_options={"content-type": foto_vehiculo.content_type}
+            )
+            
+            foto_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET_NAME}/{unique_filename}"
+            
+        except Exception as e:
+            print(f"ERROR SUPABASE STORAGE - VEHÍCULO: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error al subir la foto del vehículo a Supabase Storage: {e}"
+            )
+        
+    # 1. Crear el objeto VehiculoCreate (usando la placa como PK)
+    vehiculo_data = {
+        "placa": placa,
+        "marca": marca,
+        "linea": linea,
+        "modelo": modelo,
+        "precio": precio,
+        "nivel_seguridad": nivel_seguridad,
+        "propietario_cedula": propietario_cedula,
+        "foto_url": foto_url
+    }
+    
+    try:
+        vehiculo_create = VehiculoCreate(**vehiculo_data)
+        db_vehiculo = Vehiculo.model_validate(vehiculo_create)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error en la validación de datos del vehículo: {e}")
+
+    # 2. Comprobar si la placa ya existe
     existing_vehiculo = session.get(Vehiculo, db_vehiculo.placa)
     if existing_vehiculo:
         raise HTTPException(
@@ -225,10 +295,21 @@ def create_vehiculo(vehiculo: VehiculoCreate, session: Session = Depends(get_ses
             detail=f"Vehículo con placa {db_vehiculo.placa} ya existe."
         )
 
+    # 3. Almacenar en la DB
     session.add(db_vehiculo)
     session.commit()
     session.refresh(db_vehiculo)
-    return db_vehiculo
+    
+    # 4. Devolver una respuesta Template para éxito
+    context = {
+        "request": request, 
+        "vehiculo": db_vehiculo # Pasamos el objeto Vehiculo
+    }
+    return templates.TemplateResponse(
+        "registro_vehiculo_exitoso.html", 
+        context, 
+        status_code=status.HTTP_201_CREATED
+    )
 
 @app.get("/vehiculos/{placa}", response_model=VehiculoReadWithFichaTecnica, tags=["Vehiculos"])
 def read_vehiculo(placa: str, session: Session = Depends(get_session)):
