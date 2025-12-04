@@ -306,7 +306,7 @@ async def create_vehiculo_from_form(
         "vehiculo": db_vehiculo # Pasamos el objeto Vehiculo
     }
     return templates.TemplateResponse(
-        "registro_vehiculo_exitoso.html", 
+        "exitoso_vehiculo.html", 
         context, 
         status_code=status.HTTP_201_CREATED
     )
@@ -385,6 +385,78 @@ def update_ficha_tecnica(placa: str, ficha_update: FichaTecnicaUpdate, session: 
 # =================================================================
 # 6. ENDPOINTS PARA COMPRA (Transacciones N:M)
 # =================================================================
+@app.get("/compras/registro", tags=["Compras - Frontend"])
+def get_registro_compra(request: Request):
+    """Muestra el formulario HTML para registrar una nueva compra/transacción."""
+    context = {
+        "request": request,
+        "titulo_pagina": "Registro de Nueva Compra"
+    }
+    return templates.TemplateResponse("registro_compra.html", context)
+
+    
+@app.post("/compras/", status_code=status.HTTP_201_CREATED, tags=["Compras"])
+async def create_compra_from_form(
+    request: Request,
+    session: Session = Depends(get_session),
+    comprador_cedula: str = Form(...),
+    vehiculo_placa: str = Form(...),
+    precio_final: float = Form(...),
+    tipo_pago: str = Form(...),
+):
+    """
+    Registra una nueva Transacción de Compra. 
+    Realiza la validación cruzada: El Usuario y el Vehículo deben existir y estar activos.
+    """
+    
+    # 1. Verificar existencia y estado del Usuario (Comprador)
+    usuario = session.get(Usuario, comprador_cedula)
+    if not usuario or usuario.estado == False:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Usuario (Comprador) con cédula {comprador_cedula} no existe o está inactivo."
+        )
+
+    # 2. Verificar existencia y estado del Vehículo
+    vehiculo = session.get(Vehiculo, vehiculo_placa)
+    if not vehiculo or vehiculo.estado == False:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail=f"Vehículo con placa {vehiculo_placa} no existe o está inactivo."
+        )
+        
+    # 3. Crear el objeto Compra
+    compra_data = {
+        "comprador_cedula": comprador_cedula,
+        "vehiculo_placa": vehiculo_placa,
+        "precio_final": precio_final,
+        "tipo_pago": tipo_pago,
+    }
+    
+    try:
+        compra_create = CompraCreate(**compra_data)
+        db_compra = Compra.model_validate(compra_create)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error en la validación de datos de Compra: {e}")
+        
+    # 4. Almacenar en la DB
+    session.add(db_compra)
+    session.commit()
+    session.refresh(db_compra)
+    
+    # 5. Devolver una respuesta Template para éxito
+    context = {
+        "request": request, 
+        "compra": db_compra,
+        "usuario": usuario,
+        "vehiculo": vehiculo,
+    }
+    return templates.TemplateResponse(
+        "exitosa_compra.html", 
+        context, 
+        status_code=status.HTTP_201_CREATED
+    )
+
 
 @app.post("/compras/", response_model=CompraRead, status_code=status.HTTP_201_CREATED, tags=["Compras"])
 def create_compra(compra: CompraCreate, session: Session = Depends(get_session)):
