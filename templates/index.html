@@ -1,3 +1,4 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,21 +6,286 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ titulo_pagina }}</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <link rel="shortcut icon" href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg" type="image/x-icon">
+    <!-- Fuente: Usamos una fuente web similar (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Bienvenido a AutoSeguro360</h1>
+    <header class="header-container">
+        <!-- Barra superior de navegación -->
+        <nav class="top-nav">
+            <div class="logo">
+                <span class="logo-text">AUTOSEGURO 360</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#carros">CARROS</a></li>
+                <li><a href="#motos">FICHA TÉCNICA</a></li>
+                <li><a href="#reportes">COMPRAS</a></li>
+                <li><a href="/usuarios/registro">REGISTRAR USUARIO</a></li>
+                <li><a href="/docs" target="_blank">API DOCS</a></li>
+            </ul>
+        </nav>
     </header>
-    <nav>
-        <p>Tu API avanzada de gestión de vehículos y usuarios está funcionando.</p>
-    </nav>
+
     <main>
-        <h2>Próximo Paso: Formularios y Dashboards</h2>
-        <p>Vamos a empezar a construir la interfaz con formularios para el ingreso de datos.</p>
+        <br><br>
+        <section class="hero-banner">
+            <div class="hero-image-overlay">
+                <img src="IMG/BANNER PRINCIPAL.jpeg" alt="">
+                <div class="hero-content">
+                    <p class="new-tag">NUEVO SEDÁN CON ESTILO Y DEPORTIVIDAD</p>
+                    <h1 class="vehicle-model">EL NUEVO K3 SEDÁN | KIA</h1>
+                    <p class="slogan">MÁS ALLÁ DE LO POSIBLE.</p>
+
+                    <div class="price-security">
+                        <span class="price">PRECIO DE OFERTA</span>
+                        <span class="amount">$80.900.000</span>
+                    </div>
+
+                    <div class="security-icons">
+                        <div class="icon-item">🛡️<p>SISTEMA ANTIBLOQUEO DE FRENOS</p></div>
+                        <div class="icon-item">⚙️<p>CONTROL ELECTRÓNICO DE ESTABILIDAD</p></div>
+                        <div class="icon-item">🚨<p>ALERTA DE COLISIÓN FRONTAL</p></div>
+                        <div class="icon-item">👶<p>SISTEMA DE SUJECIÓN INFANTIL</p></div>
+                        <div class="icon-item">💨<p>SISTEMA DE BOLSA DE AIRE (6)</p></div>
+                    </div>
+                </div>
+            </div>
+            </section>
+        <div class="content-wrapper">
+        <!-- 1. SECCIÓN DE FILTROS DE BÚSQUEDA (Adaptado al nuevo estilo) -->
+        <section class="filters-container">
+            <h2>Filtros</h2>
+            <div class="filters-grid">
+                
+                <!-- Fila 1: Marca, Línea, Tipo, Año Mínimo, Año Máximo -->
+                <div class="filter-group">
+                    <label for="marca">Marca</label>
+                    <select id="marca"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="linea">Línea</label>
+                    <select id="linea"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="tipo_vehiculo">Tipo de vehículo</label>
+                    <select id="tipo_vehiculo"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="ano_minimo">Año mínimo</label>
+                    <select id="ano_minimo"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="ano_maximo">Año máximo</label>
+                    <select id="ano_maximo"><option>Todos</option></select>
+                </div>
+
+                <!-- Fila 2: Kilometraje Mínimo, Máximo, Placa, Transmisión, Combustible -->
+                <div class="filter-group">
+                    <label for="km_minimo">Kilometraje mínimo</label>
+                    <select id="km_minimo"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="km_maximo">Kilometraje máximo</label>
+                    <select id="km_maximo"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="placa">Placa</label>
+                    <select id="placa"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="transmision">Transmisión</label>
+                    <select id="transmision"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="combustible">Combustible</label>
+                    <select id="combustible"><option>Todos</option></select>
+                </div>
+
+                <!-- Fila 3: Precio (Ocupa 3 columnas), Ubicación, Botones -->
+                <div class="filter-group price-range">
+                    <label for="precio_inicial">Precio Inicial</label>
+                    <select id="precio_inicial"><option>Todos</option></select>
+                </div>
+                <div class="filter-group price-range">
+                    <label for="precio_final">Precio final</label>
+                    <select id="precio_final"><option>Todos</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="ubicacion">Ubicación</label>
+                    <select id="ubicacion"><option>Todos</option></select>
+                </div>
+                
+                <!-- Botones de acción (Ocupa las dos últimas columnas) -->
+                <div class="filter-buttons">
+                    <button class="clear-filters-btn">Limpiar filtros</button>
+                    <!-- El botón de búsqueda ya está implícito en la selección de filtros -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SECCIÓN DE RESULTADOS (Tarjetas de Vehículos) -->
+        <section class="results-container">
+            <div class="vehicle-cards-grid">
+                
+                <!-- Tarjeta 1: CHERVOLET CAPTIVA -->
+                <div class="vehicle-card">
+                    <div class="card-image">
+                        <!-- Placeholder para la imagen del vehículo -->
+                        <img src="https://placehold.co/300x200/555/fff?text=CHEVROLET+CAPTIVA" alt="Chevrolet Captiva Premier">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">CHEVROLET CAPTIVA PREMIER TURBO TP 1500CC T 4X2</h3>
+                        <div class="card-price">
+                            <span class="price-tag">💰 $82.900.000</span>
+                        </div>
+                        <div class="card-details">
+                            <span>📅 2023</span>
+                            <span>⚙️ Automática</span>
+                            <span>🛣️ 3.606 Km</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-buy">Comprar</button>
+                            <button class="btn-compare">Comparar con otros carros</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: MAZDA CX30 -->
+                <div class="vehicle-card">
+                    <div class="card-image">
+                         <!-- Placeholder para la imagen del vehículo -->
+                        <img src="https://placehold.co/300x200/555/fff?text=MAZDA+CX30" alt="Mazda CX30 Grand Touring">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">MAZDA CX30 GRAND TOURING TP 2000CC 7AB R18 TC CT 4X2</h3>
+                        <div class="card-price">
+                            <span class="price-tag">💰 $99.900.000</span>
+                        </div>
+                        <div class="card-details">
+                            <span>📅 2021</span>
+                            <span>⚙️ Automática</span>
+                            <span>🛣️ 20.135 Km</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-buy">Comprar</button>
+                            <button class="btn-compare">Comparar con otros carros</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta 3: RENAULT OROCH -->
+                <div class="vehicle-card">
+                    <div class="card-image">
+                        <!-- Placeholder para la imagen del vehículo -->
+                        <img src="https://placehold.co/300x200/555/fff?text=RENAULT+OROCH" alt="Renault Oroch Intens">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">RENAULT OROCH INTENS OUTSIDER MT 1300CC T 4X4</h3>
+                        <div class="card-price">
+                            <span class="price-tag">💰 $89.900.000</span>
+                        </div>
+                        <div class="card-details">
+                            <span>📅 2023</span>
+                            <span>⚙️ Mecánica</span>
+                            <span>🛣️ 33.053 Km</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-buy">Comprar</button>
+                            <button class="btn-compare">Comparar con otros carros</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tarjeta de ejemplo adicional -->
+                <div class="vehicle-card">
+                    <div class="card-image">
+                        <!-- Placeholder para la imagen del vehículo -->
+                        <img src="https://placehold.co/300x200/004d99/fff?text=OTRO+VEHICULO" alt="Otro Vehículo">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">TOYOTA COROLLA CROSS XEI MT 1800CC H 4X2</h3>
+                        <div class="card-price">
+                            <span class="price-tag">💰 $105.500.000</span>
+                        </div>
+                        <div class="card-details">
+                            <span>📅 2022</span>
+                            <span>⚙️ Híbrido</span>
+                            <span>🛣️ 15.000 Km</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-buy">Comprar</button>
+                            <button class="btn-compare">Comparar con otros carros</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    
+    <!-- 4. FOOTER (Se mantiene igual) -->
+    <footer class="main-footer">
+        <div class="footer-grid">
+            
+            <!-- Columna 1: Logo y Otros Proyectos/Socios -->
+            <div class="footer-col footer-branding">
+                <div class="footer-logo">
+                    <span class="logo-text">AutoSeguro360</span>
+                    <p class="project-subtitle">La seguridad en tu camino</p>
+                </div>
+                <h3>Proyectos Relacionados</h3>
+                <div class="partner-logos">
+                    <!-- [Espacio para Logos de Socios] -->
+                    <img src="https://placehold.co/60x30/004d99/ffffff?text=Socio1" alt="Logo Socio 1">
+                    <img src="https://placehold.co/60x30/004d99/ffffff?text=Socio2" alt="Logo Socio 2">
+                    <img src="https://placehold.co/60x30/004d99/ffffff?text=Socio3" alt="Logo Socio 3">
+                </div>
+            </div>
+
+            <!-- Columna 2: Empresa (Viabilidad y Gestión) -->
+            <div class="footer-col">
+                <h3>Empresa</h3>
+                <ul>
+                    <li><a href="#">▶️ Acceso Colaboradores</a></li>
+                    <li><a href="#">▶️ Trabaje con Nosotros</a></li>
+                    <li><a href="#">▶️ PQR & Servicio al cliente</a></li>
+                    <li><a href="#">▶️ Política de Protección de Datos</a></li>
+                    <li><a href="#">▶️ Gestión Social</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna 3: Menú Rápido (Modelos y Funcionalidades) -->
+            <div class="footer-col">
+                <h3>Menú Rápido</h3>
+                <ul>
+                    <li><a href="#">▶️ Vehículos Nuevos</a></li>
+                    <li><a href="#">▶️ Ficha Técnica (CRUD)</a></li>
+                    <li><a href="#">▶️ Registro de Compras</a></li>
+                    <li><a href="/usuarios/registro">▶️ Registro de Usuarios</a></li>
+                    <li><a href="#citas">▶️ Cita Taller</a></li>
+                    <li><a href="#">▶️ Vitrinas & Talleres</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna 4: Reportes y Viabilidad -->
+            <div class="footer-col">
+                <h3>Viabilidad y Reportes</h3>
+                <ul>
+                    <li><a href="#">▶️ Informe de Siniestralidad (Dashboard)</a></li>
+                    <li><a href="#">▶️ Reporte Estadístico de Compras</a></li>
+                </ul>
+                <!-- Icono de Pago/Seguro (Simulación) -->
+                <div class="payment-icon">
+                    <!-- [Espacio para Logo de Pago/Seguro] -->
+                    <img src="https://placehold.co/150x50/007bff/ffffff?text=PAGOS+SEGUROS" alt="Pagos Seguros">
+                </div>
+            </div>
+        </div>
         
-        </main>
-    <footer>
-        <p>&copy; 2025 Desarrollado por Jhon Alexander Rodriguez Redondo</p>
+        <!-- Derechos de autor -->
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo. Todos los derechos reservados.</p>
+        </div>
     </footer>
 </body>
 </html>
