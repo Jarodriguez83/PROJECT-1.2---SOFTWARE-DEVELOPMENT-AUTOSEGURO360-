@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTRO | VEHICULO</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <link rel="shortcut icon" href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg" type="image/x-icon">
+
+</head>
+
+<body>
+    <header class="header-container">
+        <nav class="top-nav">
+            <div class="logo">
+                <span class="logo-text">AUTOSEGURO 360</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">CARROS</a></li>
+                <li><a href="/vehiculos/registro">REGISTRAR VEHICULO</a></li>
+                <li><a href="#reportes">COMPRAS</a></li>
+                <li><a href="/usuarios/registro">USUARIO</a></li>
+                <li><a href="/docs" target="_blank">API DOCS</a></li>
+            </ul>
+        </nav>
+    </header>
+    <br><br>
+
+    <main>
+
+    </main>
+    
+    <!-- FOOTER  -->
+    <footer class="main-footer">
+        <div class="footer-grid">
+
+            <div class="footer-col footer-branding">
+                <div class="footer-logo">
+                    <span class="logo-text">AUTOSEGURO360</span>
+                    <br><br>
+                    <p class="project-subtitle">LA SEGURIDAD EN TU CAMINO</p>
+                </div>
+                <h3>PÁGINAS RELACIONADAS</h3>
+                <div class="partner-logos">
+                    <center>
+                        <a href="https://www.latinncap.com/es/" target="_blank"><img
+                                src="https://placehold.co/60x30/004d99/ffffff?text=NCAP" alt="NCAP" target="_blank"></a>
+                        <br>
+                        <a href="https://mintransporte.gov.co/" target="_blank"><img
+                                src="https://placehold.co/180x30/004d99/ffffff?text=MINTRANSPORTE"
+                                alt="MINTRANSPORTE"></a>
+                    </center>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>EMPRESA</h3>
+                <ul>
+                    <li><a href="#">ACCESO COLABORADORES</a></li>
+                    <li><a href="#">TRABAJE CON NOSOTROS</a></li>
+                    <li><a href="#">PQR & SERVICIO AL CLIENTE</a></li>
+                    <li><a href="#">POLÍTICA DE PROTECCIÓN DE DATOS</a></li>
+                    <li><a href="#">GESTIÓN SOCIAL</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>MENÚ RÁPIDO</h3>
+                <ul>
+                    <li><a href="#">VEHÍCULOS NUEVOS</a></li>
+                    <li><a href="#">FICHA TÉCNICA (CRUD)</a></li>
+                    <li><a href="#">REGISTRO DE COMPRAS</a></li>
+                    <li><a href="/usuarios/registro">REGISTRO DE USUARIOS</a></li>
+                    <li><a href="#citas">CITA TALLER</a></li>
+                    <li><a href="#">VITRINAS & TALLERES</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>VIABILIDAD Y REPORTES</h3>
+                <ul>
+                    <li><a href="#">INFORME DE SINIESTRALIDAD (DASHBOARD)</a></li>
+                    <li><a href="#">REPORTE ESTADÍSTICO DE COMPRAS</a></li>
+                </ul>
+                <div class="payment-icon">
+                    <img src="https://placehold.co/150x50/007bff/ffffff?text=PAGOS+SEGUROS" alt="PAGOS SEGUROS">
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo. Todos los derechos
+                reservados.</p>
+        </div>
+    </footer>
+</body>
+<style>
+    /* FOOTER */
+    .main-footer {
+        background-color: var(--color-footer-bg);
+        color: var(--color-footer-text);
+        padding: 40px 50px 20px;
+        border-top: 1px solid #e0e0e0;
+        font-family: cursive;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-col h3 {
+        color: var(--color-primary);
+        font-size: 18px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--color-secondary);
+        padding-bottom: 5px;
+        width: fit-content;
+    }
+
+    .footer-branding .logo-text {
+        font-size: 28px;
+        color: var(--color-primary);
+    }
+
+    .project-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-top: -5px;
+        margin-bottom: 20px;
+    }
+
+    .partner-logos img {
+        margin-right: 10px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+        font-family: cursive;
+    }
+
+    .partner-logos img:hover {
+        opacity: 1;
+    }
+
+    .payment-icon img {
+        margin-top: 20px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .footer-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-col li {
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .footer-col a {
+        color: var(--color-footer-text);
+        display: flex;
+        align-items: center;
+    }
+
+    .footer-col a:hover {
+        color: var(--color-secondary);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 30px;
+        padding-top: 15px;
+        font-size: 12px;
+        color: #999;
+    }
+</style>
+
+</html>
