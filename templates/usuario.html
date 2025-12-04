@@ -1,119 +1,255 @@
-<!-- templates/registro_usuario.html -->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ titulo_pagina }}</title>
+    <title>REGISTRO | USUARIO</title>
+    <link rel="shortcut icon" href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
 </head>
+
 <body>
     <header class="header-container">
-        <!-- Barra superior de navegación -->
         <nav class="top-nav">
             <div class="logo">
                 <span class="logo-text">AUTOSEGURO 360</span>
             </div>
             <ul class="nav-links">
                 <li><a href="/">CARROS</a></li>
-                <li><a href="#motos">FICHA TÉCNICA</a></li>
+                <li><a href="/vehiculos/registro">REGISTRAR VEHICULO</a></li>
                 <li><a href="#reportes">COMPRAS</a></li>
                 <li><a href="/usuarios/registro">USUARIO</a></li>
                 <li><a href="/docs" target="_blank">API DOCS</a></li>
             </ul>
         </nav>
     </header>
-
+    <br><br>
     <main class="content-wrapper">
         <div class="contenedor-formulario">
-            <h2>Registro de Usuario</h2>
-            
-            <!-- 🚨 CLAVE: action apunta al endpoint POST /usuarios/ y enctype soporta archivos -->
+            <center><h2>REGISTRO DE USUARIO</h2></center>
             <form action="/usuarios/" method="post" enctype="multipart/form-data">
-                
-                <label for="cedula">Cédula (Identificador Único):</label>
-                <input type="text" id="cedula" name="cedula" placeholder="Ej: 1022334455" required>
-
-                <label for="nombres_completo">Nombre Completo:</label>
-                <input type="text" id="nombres_completo" name="nombres_completo" placeholder="Ej: Juan Pérez Rodríguez" required>
-
-                <label for="celular">Celular:</label>
-                <input type="tel" id="celular" name="celular" placeholder="Ej: 3001234567" required>
-
-                <label for="email">Correo Electrónico:</label>
-                <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
-
-                <label for="edad">Edad:</label>
-                <input type="number" id="edad" name="edad" placeholder="Mínimo 18" required>
-
-                <label for="categoria_licencia">Categoría Licencia (Ej. A2, B1):</label>
-                <input type="text" id="categoria_licencia" name="categoria_licencia" value="0" placeholder="Escribe '0' si no tiene licencia" required>
-                
-                <label for="foto_perfil">Foto de Perfil (Opcional - Multimedia):</label>
-                <!-- 🚨 INPUT PARA ARCHIVO -->
+                <label for="cedula">CÉDULA (IDENTIFICADOR ÚNICO):</label>
+                <input type="text" id="cedula" name="cedula" placeholder="EJ: 1022334455" required>
+                <label for="nombres_completo">NOMBRE COMPLETO:</label>
+                <input type="text" id="nombres_completo" name="nombres_completo" placeholder="EJ: JUAN PÉREZ RODRÍGUEZ"
+                    required>
+                <label for="celular">CELULAR:</label>
+                <input type="tel" id="celular" name="celular" placeholder="EJ: 3001234567" required>
+                <label for="email">CORREO ELECTRÓNICO:</label>
+                <input type="email" id="email" name="email" placeholder="EJEMPLO@CORREO.COM" required>
+                <label for="edad">EDAD:</label>
+                <input type="number" id="edad" name="edad" placeholder="MÍNIMO 18" required>
+                <label for="categoria_licencia">CATEGORÍA LICENCIA (EJ. A2, B1):</label>
+                <input type="text" id="categoria_licencia" name="categoria_licencia" value="0"
+                    placeholder="ESCRIBE '0' SI NO TIENE LICENCIA" required>
+                <label for="foto_perfil">FOTO DE PERFIL (OPCIONAL - MULTIMEDIA):</label>
                 <input type="file" id="foto_perfil" name="foto_perfil">
-
-                <button type="submit">Registrar Usuario</button>
+                <button type="submit">REGISTRAR</button>
             </form>
         </div>
     </main>
 
+    <!-- FOOTER  -->
     <footer class="main-footer">
+        <div class="footer-grid">
+
+            <div class="footer-col footer-branding">
+                <div class="footer-logo">
+                    <span class="logo-text">AUTOSEGURO360</span>
+                    <br><br>
+                    <p class="project-subtitle">LA SEGURIDAD EN TU CAMINO</p>
+                </div>
+                <h3>PÁGINAS RELACIONADAS</h3>
+                <div class="partner-logos">
+                    <center>
+                        <a href="https://www.latinncap.com/es/" target="_blank"><img
+                                src="https://placehold.co/60x30/004d99/ffffff?text=NCAP" alt="NCAP" target="_blank"></a>
+                        <br>
+                        <a href="https://mintransporte.gov.co/" target="_blank"><img
+                                src="https://placehold.co/180x30/004d99/ffffff?text=MINTRANSPORTE"
+                                alt="MINTRANSPORTE"></a>
+                    </center>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>EMPRESA</h3>
+                <ul>
+                    <li><a href="#">ACCESO COLABORADORES</a></li>
+                    <li><a href="#">TRABAJE CON NOSOTROS</a></li>
+                    <li><a href="#">PQR & SERVICIO AL CLIENTE</a></li>
+                    <li><a href="#">POLÍTICA DE PROTECCIÓN DE DATOS</a></li>
+                    <li><a href="#">GESTIÓN SOCIAL</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>MENÚ RÁPIDO</h3>
+                <ul>
+                    <li><a href="#">VEHÍCULOS NUEVOS</a></li>
+                    <li><a href="#">FICHA TÉCNICA (CRUD)</a></li>
+                    <li><a href="#">REGISTRO DE COMPRAS</a></li>
+                    <li><a href="/usuarios/registro">REGISTRO DE USUARIOS</a></li>
+                    <li><a href="#citas">CITA TALLER</a></li>
+                    <li><a href="#">VITRINAS & TALLERES</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>VIABILIDAD Y REPORTES</h3>
+                <ul>
+                    <li><a href="#">INFORME DE SINIESTRALIDAD (DASHBOARD)</a></li>
+                    <li><a href="#">REPORTE ESTADÍSTICO DE COMPRAS</a></li>
+                </ul>
+                <div class="payment-icon">
+                    <img src="https://placehold.co/150x50/007bff/ffffff?text=PAGOS+SEGUROS" alt="PAGOS SEGUROS">
+                </div>
+            </div>
+        </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo.</p>
+            <p>&copy; 2025 AutoSeguro360. Desarrollado por Jhon Alexander Rodriguez Redondo. Todos los derechos
+                reservados.</p>
         </div>
     </footer>
 </body>
 <style>
-    /* -------------------------------------- */
-/* ESTILOS DE FORMULARIOS (Para registro_usuario.html) */
-/* -------------------------------------- */
-.contenedor-formulario {
-    max-width: 600px;
-    margin: 50px auto; /* Centrado en la página */
-    padding: 30px;
-    background-color: var(--color-light); /* Fondo blanco */
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-.contenedor-formulario h2 {
-    color: var(--color-primary); /* Azul oscuro */
-    border-bottom: 2px solid var(--color-secondary); /* Azul vibrante */
-    padding-bottom: 10px;
-    margin-bottom: 25px;
-}
-.contenedor-formulario form label {
-    display: block;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-.contenedor-formulario form input[type="text"],
-.contenedor-formulario form input[type="email"],
-.contenedor-formulario form input[type="tel"],
-.contenedor-formulario form input[type="number"],
-.contenedor-formulario form input[type="file"] { /* Incluye el input file */
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-.contenedor-formulario form button[type="submit"] {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin-top: 30px;
-    background-color: var(--color-primary); /* Azul oscuro */
-    color: var(--color-light);
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.contenedor-formulario form button[type="submit"]:hover {
-    background-color: var(--color-secondary); /* Azul vibrante al pasar el mouse */
-}
+    /* ESTILOS DE FORMULARIOS */
+    .contenedor-formulario {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: var(--color-light);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-formulario h2 {
+        color: var(--color-primary);
+        border-bottom: 2px solid var(--color-secondary);
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+    }
+
+    .contenedor-formulario form label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .contenedor-formulario form input[type="text"],
+    .contenedor-formulario form input[type="email"],
+    .contenedor-formulario form input[type="tel"],
+    .contenedor-formulario form input[type="number"],
+    .contenedor-formulario form input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .contenedor-formulario form button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 30px;
+        background-color: var(--color-primary);
+        color: var(--color-light);
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .contenedor-formulario form button[type="submit"]:hover {
+        background-color: var(--color-secondary);
+    }
+
+
+    /* FOOTER */
+    .main-footer {
+        background-color: var(--color-footer-bg);
+        color: var(--color-footer-text);
+        padding: 40px 50px 20px;
+        border-top: 1px solid #e0e0e0;
+        font-family: cursive;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-col h3 {
+        color: var(--color-primary);
+        font-size: 18px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--color-secondary);
+        padding-bottom: 5px;
+        width: fit-content;
+    }
+
+    .footer-branding .logo-text {
+        font-size: 28px;
+        color: var(--color-primary);
+    }
+
+    .project-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-top: -5px;
+        margin-bottom: 20px;
+    }
+
+    .partner-logos img {
+        margin-right: 10px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+        font-family: cursive;
+    }
+
+    .partner-logos img:hover {
+        opacity: 1;
+    }
+
+    .payment-icon img {
+        margin-top: 20px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .footer-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-col li {
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .footer-col a {
+        color: var(--color-footer-text);
+        display: flex;
+        align-items: center;
+    }
+
+    .footer-col a:hover {
+        color: var(--color-secondary);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 30px;
+        padding-top: 15px;
+        font-size: 12px;
+        color: #999;
+    }
 </style>
+
 </html>
