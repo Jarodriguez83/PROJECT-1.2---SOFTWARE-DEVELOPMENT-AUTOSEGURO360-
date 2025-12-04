@@ -23,7 +23,7 @@
             <ul class="nav-links">
                 <li><a href="/">CARROS</a></li>
                 <li><a href="/vehiculos/registro">REGISTRAR VEHICULO</a></li>
-                <li><a href="#reportes">COMPRAS</a></li>
+                <li><a href="/compras/registro">COMPRAS</a></li>
                 <li><a href="/usuarios/registro">USUARIO</a></li>
                 <li><a href="/docs" target="_blank">API DOCS</a></li>
             </ul>
@@ -32,9 +32,9 @@
 
     <main class="content-wrapper">
         <div class="contenedor-formulario">
-            <h2>Registro de Usuario Completado</h2>
+            <center><h2>REGISTRO DE USUARIO COMPLETADO</h2></center>
 
-            <p class="success-message"> El usuario ha sido registrado correctamente en la base de datos.</p>
+            <p class="success-message"> EL USUARIO HA SIDO REGISTRADO CORRECTAMENTE EN LA BASE DE DATOS.</p>
 
             <div class="registration-details">
 
@@ -49,30 +49,30 @@
                 {% endif %}
 
                 <div class="data-table-container">
-                    <h3>Datos del Usuario</h3>
+                    <center><h3>DATOS DEL USUARIO</h3></center>
                     <table class="user-data-table">
                         <tr>
-                            <th>Cédula</th>
+                            <th> CÉDULA</th>
                             <td>{{ usuario.cedula }}</td>
                         </tr>
                         <tr>
-                            <th>Nombre Completo</th>
+                            <th> NOMBRE COMPLETO</th>
                             <td>{{ usuario.nombres_completo }}</td>
                         </tr>
                         <tr>
-                            <th>Celular</th>
+                            <th> CELULAR</th>
                             <td>{{ usuario.celular }}</td>
                         </tr>
                         <tr>
-                            <th>Email</th>
+                            <th> EMAIL</th>
                             <td>{{ usuario.email }}</td>
                         </tr>
                         <tr>
-                            <th>Edad</th>
+                            <th>EDAD</th>
                             <td>{{ usuario.edad }}</td>
                         </tr>
                         <tr>
-                            <th>Categoría Licencia</th>
+                            <th>CATEGORÍA LICENCIA</th>
                             <td>{{ usuario.categoria_licencia }}</td>
                         </tr>
                     </table>
@@ -80,8 +80,8 @@
             </div>
 
             <div class="action-links">
-                <p><a href="/usuarios/registro">Registrar otro usuario</a></p>
-                <p><a href="/">Volver al Explorador</a></p>
+                <p><a href="/usuarios/registro">REGISTRAR OTRO USUARIO</a></p>
+                <p><a href="/">VOLVER AL INICIO</a></p>
             </div>
         </div>
     </main>

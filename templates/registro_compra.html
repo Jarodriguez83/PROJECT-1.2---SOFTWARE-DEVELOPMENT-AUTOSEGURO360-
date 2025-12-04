@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO | VEHICULO</title>
+    <title>REGISTRO | COMPRA</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
     <link rel="shortcut icon"
         href="https://okuotijfayaoecerimfi.supabase.co/storage/v1/object/public/IMAGENES-AUTOSEGURO360/BANNER/FAVICON.jpeg"
@@ -29,44 +29,34 @@
     </header>
     <br><br>
 
-    <main class="content-wrapper">
-        <div class="contenedor-formulario">
-             <center><h2>REGISTRO DE VEHÍCULO</h2></center>
 
-            <form action="/vehiculos/" method="post" enctype="multipart/form-data">
 
-                <center><h3>DATOS DE IDENTIFICACIÓN Y COMERCIALES</h3></center>
 
-                <label for="placa">PLACA (ID ÚNICO):</label>
-                <input type="text" id="placa" name="placa" placeholder="Ej: ABC123E" required>
 
-                <label for="marca">MARCA:</label>
-                <input type="text" id="marca" name="marca" placeholder="Ej: Chevrolet" required>
 
-                <label for="linea">LÍNEA:</label>
-                <input type="text" id="linea" name="linea" placeholder="Ej: Captiva" required>
 
-                <label for="modelo">AÑO DE FABRICACIÓN (MODELO):</label>
-                <input type="number" id="modelo" name="modelo" placeholder="Ej: 2023" required>
 
-                <label for="precio">PRECIO DE VENTA:</label>
-                <input type="number" id="precio" name="precio" placeholder="Ej: 82900000" required>
 
-                <label for="nivel_seguridad">NIVEL DE SEGURIDAD (LATIN NCAP 0-5):</label>
-                <input type="number" id="nivel_seguridad" name="nivel_seguridad" value="0" min="0" max="5">
 
-                <label for="propietario_cedula">CÉDULA DEL PROPIETARIO (OPCIONAL - FK):</label>
-                <input type="text" id="propietario_cedula" name="propietario_cedula"
-                    placeholder="Cédula del dueño actual (si existe)">
 
-                <label for="foto_vehiculo">FOTO DEL VEHÍCULO (MULTIMEDIA):</label>
-                <!-- 🚨 INPUT PARA ARCHIVO -->
-                <input type="file" id="foto_vehiculo" name="foto_vehiculo">
 
-                <button type="submit">REGISTRAR</button>
-            </form>
-        </div>
-    </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- FOOTER  -->
     <footer class="main-footer">
@@ -129,78 +119,8 @@
     </footer>
 </body>
 <style>
-    /* -------------------------------------- */
-    /* ESTILOS DE FORMULARIOS (Para registro_vehiculo.html y registro_usuario.html) */
-    /* -------------------------------------- */
-    .contenedor-formulario {
-        max-width: 600px;
-        margin: 50px auto;
-        /* Centrado en la página */
-        padding: 30px;
-        background-color: var(--color-light);
-        /* Fondo blanco */
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .contenedor-formulario h2 {
-        color: var(--color-primary);
-        /* Azul oscuro */
-        border-bottom: 2px solid var(--color-secondary);
-        /* Azul vibrante */
-        padding-bottom: 10px;
-        margin-bottom: 25px;
-    }
-
-    .contenedor-formulario h3 {
-        color: var(--color-primary);
-        /* Azul oscuro para subtítulos */
-        margin-top: 25px;
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-        font-weight: 500;
-    }
-
-    .contenedor-formulario form label {
-        display: block;
-        margin-top: 15px;
-        margin-bottom: 5px;
-        font-weight: 500;
-    }
-
-    .contenedor-formulario form input[type="text"],
-    .contenedor-formulario form input[type="email"],
-    .contenedor-formulario form input[type="tel"],
-    .contenedor-formulario form input[type="number"],
-    .contenedor-formulario form input[type="file"] {
-        /* Incluye el input file */
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-
-    .contenedor-formulario form button[type="submit"] {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        margin-top: 30px;
-        background-color: var(--color-primary);
-        /* Azul oscuro */
-        color: var(--color-light);
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .contenedor-formulario form button[type="submit"]:hover {
-        background-color: var(--color-secondary);
-        /* Azul vibrante al pasar el mouse */
-    }
-
+    
+    
     /* FOOTER */
     .main-footer {
         background-color: var(--color-footer-bg);
