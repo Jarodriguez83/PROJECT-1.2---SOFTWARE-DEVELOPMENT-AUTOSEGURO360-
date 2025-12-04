@@ -50,176 +50,112 @@
             </div>
             </section>
         <div class="content-wrapper">
-        <!-- 1. SECCIÓN DE FILTROS DE BÚSQUEDA (Adaptado al nuevo estilo) -->
-        <section class="filters-container">
-            <h2>Filtros</h2>
-            <div class="filters-grid">
+        <!-- 1. SECCIÓN DE FILTROS DE BÚSQUEDA -->
+        <section class="filters-container" id="filtros">
+            <h2>Buscador de Vehículos</h2>
+            <!-- FORMULARIO DE BÚSQUEDA GET: Envía parámetros a la ruta raíz (homepage) -->
+            <form action="/" method="GET" class="filters-grid filters-simplified" id="filter-form">
                 
-                <!-- Fila 1: Marca, Línea, Tipo, Año Mínimo, Año Máximo -->
-                <div class="filter-group">
-                    <label for="marca">Marca</label>
-                    <select id="marca"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="linea">Línea</label>
-                    <select id="linea"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="tipo_vehiculo">Tipo de vehículo</label>
-                    <select id="tipo_vehiculo"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="ano_minimo">Año mínimo</label>
-                    <select id="ano_minimo"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="ano_maximo">Año máximo</label>
-                    <select id="ano_maximo"><option>Todos</option></select>
+                <!-- NUEVO: CAMPO DE TEXTO DE BÚSQUEDA LIBRE -->
+                <div class="filter-group text-search-field">
+                    <label for="busqueda_texto">Marca, Modelo o Línea</label>
+                    <input type="text" id="busqueda_texto" name="busqueda_texto" 
+                           placeholder="Ej: Chevrolet Captiva" 
+                           value="{{ current_search }}"
+                           >
                 </div>
 
-                <!-- Fila 2: Kilometraje Mínimo, Máximo, Placa, Transmisión, Combustible -->
+                <!-- FILTRO AÑO (MODELO) -->
                 <div class="filter-group">
-                    <label for="km_minimo">Kilometraje mínimo</label>
-                    <select id="km_minimo"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="km_maximo">Kilometraje máximo</label>
-                    <select id="km_maximo"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="placa">Placa</label>
-                    <select id="placa"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="transmision">Transmisión</label>
-                    <select id="transmision"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="combustible">Combustible</label>
-                    <select id="combustible"><option>Todos</option></select>
-                </div>
-
-                <!-- Fila 3: Precio (Ocupa 3 columnas), Ubicación, Botones -->
-                <div class="filter-group price-range">
-                    <label for="precio_inicial">Precio Inicial</label>
-                    <select id="precio_inicial"><option>Todos</option></select>
-                </div>
-                <div class="filter-group price-range">
-                    <label for="precio_final">Precio final</label>
-                    <select id="precio_final"><option>Todos</option></select>
-                </div>
-                <div class="filter-group">
-                    <label for="ubicacion">Ubicación</label>
-                    <select id="ubicacion"><option>Todos</option></select>
+                    <label for="anio_filtro">Año (Exacto)</label>
+                    <!-- NAME: anio_filtro -->
+                    <select id="anio_filtro" name="anio_filtro">
+                        <option value="" {% if current_anio == "" %}selected{% endif %}>Cualquier Año</option>
+                        <option value="2024" {% if current_anio == "2024" %}selected{% endif %}>2024</option>
+                        <option value="2023" {% if current_anio == "2023" %}selected{% endif %}>2023</option>
+                        <option value="2022" {% if current_anio == "2022" %}selected{% endif %}>2022</option>
+                        <option value="2021" {% if current_anio == "2021" %}selected{% endif %}>2021</option>
+                        <option value="2020" {% if current_anio == "2020" %}selected{% endif %}>2020</option>
+                    </select>
                 </div>
                 
-                <!-- Botones de acción (Ocupa las dos últimas columnas) -->
+                <!-- FILTRO NCAP (Nivel de Seguridad Mínimo) -->
+                <div class="filter-group">
+                    <label for="ncap_filtro">Seguridad (NCAP Min)</label>
+                    <!-- NAME: ncap_filtro -->
+                    <select id="ncap_filtro" name="ncap_filtro">
+                        <option value="" {% if current_ncap == "" %}selected{% endif %}>Cualquier Nivel</option>
+                        <option value="4" {% if current_ncap == "4" %}selected{% endif %}>4 Estrellas o más</option>
+                        <option value="3" {% if current_ncap == "3" %}selected{% endif %}>3 Estrellas o más</option>
+                        <option value="2" {% if current_ncap == "2" %}selected{% endif %}>2 Estrellas o más</option>
+                        <option value="1" {% if current_ncap == "1" %}selected{% endif %}>1 Estrella o más</option>
+                    </select>
+                </div>
+                
+                <!-- FILTRO PRECIO MÁXIMO -->
+                <div class="filter-group">
+                    <label for="precio_max">Precio Máximo</label>
+                    <!-- NAME: precio_max -->
+                    <select id="precio_max" name="precio_max">
+                        <option value="" {% if current_precio == "" %}selected{% endif %}>Sin Límite</option>
+                        <option value="50000000" {% if current_precio == "50000000" %}selected{% endif %}>$50,000,000</option>
+                        <option value="100000000" {% if current_precio == "100000000" %}selected{% endif %}>$100,000,000</option>
+                        <option value="200000000" {% if current_precio == "200000000" %}selected{% endif %}>$200,000,000</option>
+                        <option value="500000000" {% if current_precio == "500000000" %}selected{% endif %}>$500,000,000</option>
+                    </select>
+                </div>
+                
                 <div class="filter-buttons">
-                    <button class="clear-filters-btn">Limpiar filtros</button>
-                    <!-- El botón de búsqueda ya está implícito en la selección de filtros -->
+                    <!-- Botón de Submit -->
+                    <button type="submit" class="apply-filters-btn">Buscar</button>
+                    <!-- Botón de Limpiar: Usamos JS para resetear el formulario -->
+                    <button type="button" class="clear-filters-btn" id="clear-button">Limpiar</button>
                 </div>
-            </div>
+            </form>
         </section>
 
-        <!-- 2. SECCIÓN DE RESULTADOS (Tarjetas de Vehículos) -->
+        <!-- 2. SECCIÓN DE RESULTADOS (CATÁLOGO DINÁMICO) -->
         <section class="results-container">
+            <center><h2>VEHÍCULOS DISPONIBLES | VENTA </h2></center>
             <div class="vehicle-cards-grid">
                 
-                <!-- Tarjeta 1: CHERVOLET CAPTIVA -->
-                <div class="vehicle-card">
-                    <div class="card-image">
-                        <!-- Placeholder para la imagen del vehículo -->
-                        <img src="https://placehold.co/300x200/555/fff?text=CHEVROLET+CAPTIVA" alt="Chevrolet Captiva Premier">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">CHEVROLET CAPTIVA PREMIER TURBO TP 1500CC T 4X2</h3>
-                        <div class="card-price">
-                            <span class="price-tag">💰 $82.900.000</span>
+                {# Lógica Jinja2: Itera sobre la lista de vehículos #}
+                {% if vehicles %}
+                    {% for vehiculo in vehicles %}
+                        <div class="vehicle-card">
+                            <div class="card-image">
+                                <!-- Imagen del vehículo: usa la URL de Supabase si existe, sino un placeholder -->
+                                <img src="{{ vehiculo.foto_url or 'https://placehold.co/300x200/555/ffff?text=IMAGEN+NO+DISPONIBLE' }}" 
+                                     alt="{{ vehiculo.marca }} {{ vehiculo.linea }}"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/300x200/555/fff?text=IMAGEN+ERROR';"
+                                >
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">{{ vehiculo.marca }} {{ vehiculo.linea }}</h3>
+                                <div class="card-price">
+                                    <span class="price-tag">PRECIO: ${{ "{:,.0f}".format(vehiculo.precio | float) }}</span>
+                                </div>
+                                <div class="card-details">
+                                    <span>AÑO: {{ vehiculo.modelo }}</span>
+                                    <span>NCAP: {{ vehiculo.nivel_seguridad }}/5</span>
+                                    <span>PLACA: {{ vehiculo.placa }}</span>
+                                </div>
+                                <div class="card-actions">
+                                    <a href="/compras/registro?placa={{ vehiculo.placa }}" class="btn-buy">COMPRAR VEHICULO</a>
+                                    <button class="btn-compare">REGISTRAR USUARIO</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-details">
-                            <span>📅 2023</span>
-                            <span>⚙️ Automática</span>
-                            <span>🛣️ 3.606 Km</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-buy">Comprar</button>
-                            <button class="btn-compare">Comparar con otros carros</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tarjeta 2: MAZDA CX30 -->
-                <div class="vehicle-card">
-                    <div class="card-image">
-                         <!-- Placeholder para la imagen del vehículo -->
-                        <img src="https://placehold.co/300x200/555/fff?text=MAZDA+CX30" alt="Mazda CX30 Grand Touring">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">MAZDA CX30 GRAND TOURING TP 2000CC 7AB R18 TC CT 4X2</h3>
-                        <div class="card-price">
-                            <span class="price-tag">💰 $99.900.000</span>
-                        </div>
-                        <div class="card-details">
-                            <span>📅 2021</span>
-                            <span>⚙️ Automática</span>
-                            <span>🛣️ 20.135 Km</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-buy">Comprar</button>
-                            <button class="btn-compare">Comparar con otros carros</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tarjeta 3: RENAULT OROCH -->
-                <div class="vehicle-card">
-                    <div class="card-image">
-                        <!-- Placeholder para la imagen del vehículo -->
-                        <img src="https://placehold.co/300x200/555/fff?text=RENAULT+OROCH" alt="Renault Oroch Intens">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">RENAULT OROCH INTENS OUTSIDER MT 1300CC T 4X4</h3>
-                        <div class="card-price">
-                            <span class="price-tag">💰 $89.900.000</span>
-                        </div>
-                        <div class="card-details">
-                            <span>📅 2023</span>
-                            <span>⚙️ Mecánica</span>
-                            <span>🛣️ 33.053 Km</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-buy">Comprar</button>
-                            <button class="btn-compare">Comparar con otros carros</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tarjeta de ejemplo adicional -->
-                <div class="vehicle-card">
-                    <div class="card-image">
-                        <!-- Placeholder para la imagen del vehículo -->
-                        <img src="https://placehold.co/300x200/004d99/fff?text=OTRO+VEHICULO" alt="Otro Vehículo">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">TOYOTA COROLLA CROSS XEI MT 1800CC H 4X2</h3>
-                        <div class="card-price">
-                            <span class="price-tag">💰 $105.500.000</span>
-                        </div>
-                        <div class="card-details">
-                            <span>📅 2022</span>
-                            <span>⚙️ Híbrido</span>
-                            <span>🛣️ 15.000 Km</span>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn-buy">Comprar</button>
-                            <button class="btn-compare">Comparar con otros carros</button>
-                        </div>
-                    </div>
-                </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Mensaje si no hay resultados -->
+                    <p class="no-results-message">No hay vehículos disponibles para la venta en este momento. ¡Registra uno para empezar!</p>
+                    <p><a href="/vehiculos/registro">Registrar Nuevo Vehículo</a></p>
+                {% endif %}
 
             </div>
         </section>
-    
+    </main>
     <!-- FOOTER  -->
     <footer class="main-footer">
         <div class="footer-grid">
