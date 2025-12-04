@@ -5,23 +5,29 @@ Autor: Jhon Alexander Rodriguez Redondo
 Punto de entrada para la aplicación FastAPI.
 Define los endpoints CRUD para Usuario, Vehiculo, FichaTecnica y Compra.
 """
-import datetime
+#LIBRERÍAS PARA EL USO DE SUPABASE
+from datetime import datetime 
+import shutil 
+from httpx import request
+from supabase import create_client, Client # NUEVO: Cliente Supabase
+from starlette.requests import Request # Asegúrate de tener esta importación
+
 from fastapi import Form, UploadFile, File # Añadir UploadFile y File
 from fastapi.responses import HTMLResponse # Necesaria para la respuesta HTML
 import shutil # Para manejar archivos
 
-
+#LIBRERÍAS PARA EL USO DE TEMPLATES CON FASTAPI
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles # Para servir CSS (Punto K)
 from starlette.requests import Request # Para recibir la petición y renderizar
 
 
-
+#LIBRERÍAS ESTÁNDAR PARA FASTAPI Y SQLMODEL
 from typing import List, Optional, Generator
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlmodel import Session, select
 
-# Importar la configuración de la base de datos y los modelos
+#IMPORTACIÓN DE MÓDULOS PROPIOS Y MODELOS
 from database import create_db_and_tables, get_session
 from models import (
     Usuario, UsuarioCreate, UsuarioRead, UsuarioUpdate,
@@ -65,20 +71,26 @@ app = FastAPI(
     version="1.0.0",
     description="API para la gestión de usuarios, vehículos, fichas técnicas y transacciones de compra/venta."
 )
-# 1. Montar la carpeta 'static'
+# MONTAR LA CARPETA DE ARCHIVOS ESTÁTICOS (CSS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# 2. Inicializar el motor de templates
+# INICIALIZAR LOS TEMPLATES
 templates = Jinja2Templates(directory="templates")
+
+# CONFIGURACIÓN DE SUPABASE 
+SUPABASE_URL = "https://okuotijfayaoecerimfi.supabase.co" 
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rdW90aWpmYXlhb2VjZXJpbWZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ3OTg1OTMsImV4cCI6MjA4MDM3NDU5M30.8SstgKcCZs3CbcZSd0KEH4FQ7VBEnLR3t5RJeBzvsxk" 
+SUPABASE_BUCKET_NAME = "IMG" 
+
+# CLIENTE SUPABASE INICIALIZADO
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+
 
 @app.on_event("startup")
 def on_startup():
     """Ejecuta la creación de la base de datos y tablas al iniciar la app."""
     create_db_and_tables()
-
-# =================================================================
-# 3. ENDPOINTS PARA USUARIO (CRUD Completo)
-# =================================================================
 
 @app.get("/", tags=["Root - Frontend"])
 def homepage(request: Request):
@@ -93,12 +105,24 @@ def homepage(request: Request):
     }
     return templates.TemplateResponse("index.html", context)
 
+
+
+@app.get("/usuarios/registro", tags=["Usuarios - Frontend"])
+def get_registro_usuario(request: Request):
+    """Muestra el formulario HTML para el registro de un nuevo usuario."""
+    context = {
+        "request": request,
+        "titulo_pagina": "Registro de Nuevo Usuario"
+    }
+    return templates.TemplateResponse("usuario.html", context)
+
+
 # =================================================================
 # 3. ENDPOINTS PARA USUARIO (CRUD y Formulario)
 # =================================================================
-
 @app.post("/usuarios/", status_code=status.HTTP_201_CREATED, tags=["Usuarios"])
-def create_usuario_from_form(
+async def create_usuario_from_form(
+    request: Request, # 🚨 Se requiere para templates.TemplateResponse
     session: Session = Depends(get_session),
     cedula: str = Form(...),
     nombres_completo: str = Form(...),
@@ -106,20 +130,43 @@ def create_usuario_from_form(
     email: str = Form(...),
     edad: int = Form(...),
     categoria_licencia: str = Form("0"),
-    foto_perfil: Optional[UploadFile] = File(None) # 🚨 CLAVE: Recibe el archivo
+    foto_perfil: Optional[UploadFile] = File(None),
 ):
-    """Crea un nuevo Usuario en la base de datos a partir de un formulario HTML, manejando la carga de archivos multimedia."""
+    """
+    Crea un nuevo Usuario, procesa el formulario, sube la foto a Supabase, 
+    y responde con el HTML de registro exitoso.
+    """
     
-    # --- Manejo de la URL Multimedia ---
+    # --- Manejo de la URL Multimedia (Lógica de Subida a Supabase) ---
     foto_url = None
     
     if foto_perfil and foto_perfil.filename:
-        # 🚨 SIMULACIÓN DE SUBIDA A SUPABASE (Punto H)
-        file_extension = foto_perfil.filename.split('.')[-1]
-        unique_filename = f"perfil_{cedula}_{datetime.now().timestamp()}.{file_extension}"
         
-        # Asignamos la URL simulada que Supabase daría
-        foto_url = f"https://supabase.storage.io/public/perfiles/{unique_filename}"
+        # 🚨 PROCESO DE SUBIDA REAL A SUPABASE STORAGE
+        file_extension = foto_perfil.filename.split('.')[-1]
+        unique_filename = f"fotos/{cedula}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{file_extension}"
+        
+        try:
+            # 1. Leer el archivo en memoria (Debe ser ASÍNCRONO)
+            file_data = await foto_perfil.read() 
+            
+            # 2. Subir el archivo a Supabase Storage
+            response = supabase.storage.from_(SUPABASE_BUCKET_NAME).upload(
+                file=file_data,
+                path=unique_filename,
+                file_options={"content-type": foto_perfil.content_type}
+            )
+            
+            # 3. Asignar la URL pública generada
+            foto_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET_NAME}/{unique_filename}"
+            
+        except Exception as e:
+            # Manejar cualquier error de subida
+            print(f"ERROR SUPABASE STORAGE: {e}") 
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Error al subir la foto de perfil a Supabase Storage. Verifique permisos RLS o credenciales: {e}"
+            )
         
     # 1. Crear el objeto UsuarioCreate a partir de los datos del formulario
     usuario_data = {
@@ -129,7 +176,7 @@ def create_usuario_from_form(
         "email": email,
         "edad": edad,
         "categoria_licencia": categoria_licencia,
-        "foto_perfil_url": foto_url # Usamos la URL generada o None
+        "foto_perfil_url": foto_url 
     }
     
     try:
@@ -151,32 +198,16 @@ def create_usuario_from_form(
     session.commit()
     session.refresh(db_usuario)
     
-    # 4. Devolver una respuesta HTML
-    return HTMLResponse(content=f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Registro Exitoso</title>
-            <link rel="stylesheet" href="{app.url_path_for('static', path='/style.css')}">
-        </head>
-        <body>
-            <header><h1>Registro Exitoso</h1></header>
-            <main class="contenedor-formulario">
-                <p>✅ El usuario con cédula <strong>{db_usuario.cedula}</strong> ha sido registrado correctamente.</p>
-                <p>Nombre: {db_usuario.nombres_completo}</p>
-                {f'<p>URL Multimedia: <a href="{db_usuario.foto_perfil_url}" target="_blank">Ver Foto</a></p>' if db_usuario.foto_perfil_url else ''}
-                <p><a href="/usuarios/registro">Registrar otro usuario</a></p>
-                <p><a href="/">Volver al Inicio</a></p>
-            </main>
-        </body>
-        </html>
-    """, status_code=status.HTTP_201_CREATED)
-
-@app.get("/usuarios/registro", tags=["Usuarios - Frontend"])
-def get_registro_usuario(request: Request):
-    """Muestra el formulario HTML para el registro de un nuevo usuario."""
-    return templates.TemplateResponse("usuario.html", {"request": request, "titulo_pagina": "Registrar Usuario"})
-
+    # 4. 🚨 Devolver una respuesta Template para éxito
+    context = {
+        "request": request, 
+        "usuario": db_usuario # Pasamos el objeto completo del usuario
+    }
+    return templates.TemplateResponse(
+        "registro_exitoso.html", 
+        context, 
+        status_code=status.HTTP_201_CREATED
+    )
 # =================================================================
 # 4. ENDPOINTS PARA VEHÍCULO (CRUD Completo)
 # =================================================================
