@@ -5,8 +5,8 @@ Autor: Jhon Alexander Rodriguez Redondo
 Configuración del motor de base de datos para PostgreSQL (Render/Supabase)
 usando variables de entorno y el driver asíncrono 'asyncpg'.
 
-Este código es robusto para el despliegue: lee la variable DATABASE_URL de Render
-y usa el pool de conexiones optimizado.
+SOLUCIÓN FINAL: Se modifica la URL para forzar el uso de asyncpg, resolviendo 
+el error recurrente de ModuleNotFoundError: No module named 'psycopg2'.
 """
 
 from sqlmodel import create_engine, SQLModel, Session
@@ -22,14 +22,21 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 # se usará esta URL de ejemplo. DEBES reemplazar [YOUR_PASSWORD_AQUÍ] por tu contraseña real.
 if not DATABASE_URL:
     print("ADVERTENCIA: Usando URL de base de datos de desarrollo por defecto.")
-    # Usamos el formato 'postgresql+asyncpg://' para desarrollo local
     HOST_DOMAIN = "db.okuotijfayaoecerimfi.supabase.co"
+    # Usamos el formato 'postgresql+asyncpg' para desarrollo local para que el código funcione.
     DATABASE_URL = f"postgresql+asyncpg://postgres:[YOUR_PASSWORD_AQUÍ]@{HOST_DOMAIN}:5432/postgres" 
 # ----------------------------------------------------------
 
+# 🚨 SOLUCIÓN DEFINITIVA PARA RENDER:
+# Si la URL no tiene un driver especificado (ej: es 'postgresql://...'), 
+# forzamos que use 'postgresql+asyncpg://' para evitar que SQLAlchemy busque 'psycopg2'.
+if DATABASE_URL and DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+
 # El motor debe configurarse para PostgreSQL
 engine = create_engine(
-    # La URL ahora usa el esquema 'postgresql+asyncpg' (ya sea desde el entorno o el fallback)
+    # La URL ahora usa el esquema 'postgresql+asyncpg'
     url=DATABASE_URL, 
     echo=False,
     # Ajustamos el Pool de Conexiones a un valor seguro (máximo 15 permitido en plan Nano)
