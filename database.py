@@ -16,18 +16,24 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 # --- Configuración de Desarrollo Local (si es necesario) ---
 # Si ejecutas la aplicación localmente y la variable DATABASE_URL no está seteada, 
-# se usará esta URL de ejemplo. DEBES reemplazar la parte [YOUR_PASSWORD]
+# se usará esta URL de ejemplo.
 if not DATABASE_URL:
     print("ADVERTENCIA: Usando URL de base de datos de desarrollo por defecto.")
-    # 🚨 CORRECCIÓN: Usamos el host real y el driver psycopg
-    # RECUERDA: EN EL ARCHIVO DE CONFIGURACIÓN DE RENDER DEBES USAR TU CONTRASEÑA REAL.
+    # 🚨 NOTA: La URL AHORA VUELVE A SER LA ESTÁNDAR 'postgresql://'
+    # La especificación del driver se hace abajo en create_engine
     HOST_DOMAIN = "db.okuotijfayaoecerimfi.supabase.co"
-    DATABASE_URL = f"postgresql+psycopg://postgres:[YOUR_PASSWORD_AQUÍ]@{HOST_DOMAIN}:5432/postgres" 
+    DATABASE_URL = f"postgresql://postgres:[YOUR_PASSWORD_AQUÍ]@{HOST_DOMAIN}:5432/postgres" 
 # ----------------------------------------------------------
+
+# 🚨 DETERMINAR DRIVER NAME: Usaremos 'postgresql+psycopg'
+# Esto es lo que Render usará para conectar el driver correcto.
+DRIVER_NAME = "postgresql+psycopg"
 
 # El motor debe configurarse para PostgreSQL
 engine = create_engine(
-    DATABASE_URL, 
+    # 🚨 CAMBIO CLAVE: Usamos el argumento 'drivername' para forzar el uso de psycopg
+    url=DATABASE_URL, 
+    drivername=DRIVER_NAME,
     echo=False,
     # Ajustamos el Pool de Conexiones para no exceder el límite Nano (15)
     pool_size=12, 
