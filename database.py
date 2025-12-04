@@ -2,31 +2,44 @@
 database.py
 Autor: Jhon Alexander Rodriguez Redondo
 
-Configuración del motor de base de datos (SQLite) y provisión de sesiones para FastAPI.
+Configuración del motor de base de datos para PostgreSQL (Render/Supabase)
+usando variables de entorno y el driver asíncrono 'psycopg'.
 """
 
 from sqlmodel import create_engine, SQLModel, Session
 from typing import Generator
+import os
 import models 
 
-# Nombre del archivo de base de datos
-SQLITE_FILE_NAME = "autoseguro360_avanzado.db"
-# URL de conexión para SQLite
-sqlite_url = f"sqlite:///{SQLITE_FILE_NAME}"
+# 🚨 CLAVE CRÍTICO: Leer la URL de PostgreSQL desde una variable de entorno (DATABASE_URL)
+DATABASE_URL = os.environ.get("DATABASE_URL") 
 
-# Crear el motor de la base de datos
-# echo=False para evitar que imprima todas las sentencias SQL en la consola
-# connect_args={"check_same_thread": False} es necesario para trabajar con SQLite y FastAPI
-engine = create_engine(sqlite_url, echo=False, connect_args={"check_same_thread": False})
+# --- Configuración de Desarrollo Local (si es necesario) ---
+# Si ejecutas la aplicación localmente y la variable DATABASE_URL no está seteada, 
+# se usará esta URL de ejemplo. DEBES reemplazar la parte [YOUR_PASSWORD]
+if not DATABASE_URL:
+    print("ADVERTENCIA: Usando URL de base de datos de desarrollo por defecto.")
+    # 🚨 CORRECCIÓN: Usamos el host real y el driver psycopg
+    # RECUERDA: EN EL ARCHIVO DE CONFIGURACIÓN DE RENDER DEBES USAR TU CONTRASEÑA REAL.
+    HOST_DOMAIN = "db.okuotijfayaoecerimfi.supabase.co"
+    DATABASE_URL = f"postgresql+psycopg://postgres:[YOUR_PASSWORD_AQUÍ]@{HOST_DOMAIN}:5432/postgres" 
+# ----------------------------------------------------------
 
+# El motor debe configurarse para PostgreSQL
+engine = create_engine(
+    DATABASE_URL, 
+    echo=False,
+    # Ajustamos el Pool de Conexiones para no exceder el límite Nano (15)
+    pool_size=12, 
+    max_overflow=0 
+)
 
 def create_db_and_tables():
     """
     Crea la base de datos y todas las tablas definidas en los modelos.
-    Importante: Esto borra cualquier dato existente si la estructura cambia,
-    a menos que uses migraciones (fuera del alcance de este paso).
+    Esto se ejecuta al inicio de la aplicación para asegurar que la DB esté lista.
     """
-    print(f"--- Creando o verificando la base de datos: {SQLITE_FILE_NAME} ---")
+    print(f"--- Creando o verificando tablas en PostgreSQL ---")
     SQLModel.metadata.create_all(engine)
 
 
@@ -37,6 +50,3 @@ def get_session() -> Generator[Session, None, None]:
     """
     with Session(engine) as session:
         yield session
-
-# Nota importante: Asegúrate de que el archivo 'models.py' esté completo y sin errores de sintaxis
-# antes de ejecutar la aplicación, ya que esta función depende de la metadata de SQLModel.
